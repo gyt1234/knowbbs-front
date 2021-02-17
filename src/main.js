@@ -6,7 +6,7 @@ import './plugins/element.js'
 // 导入全局样式
 import '../src/assets/css/global.css'
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://localhost/knowbbs/admin'
+axios.defaults.baseURL = 'http://localhost/knowbbs/'
 axios.defaults.timeout = 5000
 Vue.prototype.$http = axios
 

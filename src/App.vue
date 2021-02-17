@@ -1,11 +1,10 @@
 <template>
   <div id="app">
-    前台展示系统
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'app'
 }
