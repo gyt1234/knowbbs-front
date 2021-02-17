@@ -4,7 +4,11 @@
       <div class="title-zone">知也论坛</div>
       <div class="menu-zone">
         <div class="menu-item" @click="toMain">首页</div>
-        <div class="menu-item">主题</div>
+        <div class="menu-item">主题
+          <ul class="father-list">
+            <li v-for="father in fatherList" :key="father.id">{{father.module_name}}</li>
+          </ul>
+        </div>
       </div>
       <div class="search-zone">
         <el-input placeholder="搜索其实很简单" v-model="query"></el-input>
@@ -33,13 +37,23 @@ export default {
   data() {
     return {
       // 搜索关键词
-      query: ''
+      query: '',
+      // 父板块列表
+      fatherList: []
     }
+  },
+  created () {
+    this.getFatherList()
   },
   methods: {
     // 跳转首页
     toMain() {
       this.$router.push('/home')
+    },
+    // 获取所有的父板块
+    async getFatherList() {
+      const { data: res } = await this.$http.get('admin/father.php')
+      this.fatherList = res
     }
   }
 }
@@ -75,6 +89,32 @@ export default {
       background-color: rgba(59,127,196,1);
       font-size: 14px;
       cursor: pointer;
+      position: relative;
+    }
+    .menu-item:hover{
+      color: #f31717;
+      .father-list{
+        display: block;
+      }
+    }
+
+    .father-list{
+      width: 200px;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      background-color: #ffffff;
+      padding-left: 0;
+      display: none;
+    }
+    .father-list li{
+      display: inline-block;
+      color: #000000;
+      list-style: none;
+      width: 60px;
+    }
+    .father-list li:hover{
+      color: #f31717;
     }
   }
   .search-zone{
@@ -84,13 +124,16 @@ export default {
     display: flex;
 
     .el-icon-search{
-      width: 20px;
+      width: 30px;
+      text-align: center;
       background: #ffffff;
       height: 28px;
       line-height: 28px;
       margin-top: 7px;
       border: 1px solid transparent;
       border-radius: 0 4px 4px 0;
+      color: #cccccc;
+      cursor: pointer;
     }
   }
   .login-zone{
