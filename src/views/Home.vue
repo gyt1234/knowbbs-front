@@ -20,7 +20,6 @@
       </div>
     </el-header>
     <el-main>
-      这是内容
       <router-view></router-view>
     </el-main>
     <el-footer>
@@ -48,7 +47,7 @@ export default {
   methods: {
     // 跳转首页
     toMain() {
-      this.$router.push('/home')
+      this.$router.push('/index')
     },
     // 获取所有的父板块
     async getFatherList() {
@@ -157,7 +156,6 @@ export default {
 .el-main{
   width: 70%;
   margin: 0 auto;
-  background-color: aqua;
 }
 ::v-deep{
   .el-input__inner{
