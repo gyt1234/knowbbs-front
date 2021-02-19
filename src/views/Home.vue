@@ -70,14 +70,12 @@ export default {
     width: 19.6%;
     text-align: right;
     line-height: 44px;
-    background-color: rgba(72,143,206,1);
     margin-right: 20px;
     color: #ffffff;
   }
   .menu-zone{
     height: 44px !important;
     width: 11%;
-    background-color: rgba(72,143,206,1);
     display: flex;
     line-height: 44px;
     color: #ffffff;
@@ -99,12 +97,13 @@ export default {
     }
 
     .father-list{
-      width: 200px;
+      width: 400px;
       position: absolute;
       top: 30px;
       left: 0;
       background-color: #ffffff;
       padding-left: 0;
+      border: 1px solid #cccccc;
       display: none;
     }
     .father-list li{
@@ -119,7 +118,6 @@ export default {
   }
   .search-zone{
     width: 20%;
-    background-color: rgba(72,143,206,1);
     margin-right: 20px;
     display: flex;
 
@@ -137,7 +135,6 @@ export default {
     }
   }
   .login-zone{
-    background-color: rgba(72,143,206,1);
     width: 31.2%;
     text-align: right;
     line-height: 44px;

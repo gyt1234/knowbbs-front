@@ -4,6 +4,7 @@ html,body,#app{
     margin: 0;
     padding: 0;
     min-width: 1366px;
+    background-color: rgba(244,244,244,1);
 }
 .el-header,
 .el-main,
