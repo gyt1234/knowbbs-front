@@ -149,7 +149,7 @@ export default {
 
   .divider{
     height: 1px;
-    background-color: #cccccc;
+    background-color: #e4e4e4;
     margin-bottom: 10px;
   }
 }
