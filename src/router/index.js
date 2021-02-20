@@ -17,7 +17,13 @@ const routes = [
     children: [
       {
         path: '/index',
+        name: 'Index',
         component: () => import(/* webpackChunkName: "index" */ '../views/Index.vue')
+      },
+      {
+        path: '/fatherList',
+        name: 'FatherList',
+        component: () => import(/* webpackChunkName: "fatherList" */ '../views/FatherList.vue')
       }
     ]
   }
