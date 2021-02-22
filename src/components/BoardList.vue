@@ -24,11 +24,9 @@ export default {
     }
   },
   async created () {
-    // this.getBoards()
     const { data: res } = await this.$http.get('admin/son.php')
     this.boardList = res
     this.handleBoards()
-    console.log(this.allBoards)
   },
   methods: {
     // 获取所有的板块
