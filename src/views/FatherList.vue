@@ -258,6 +258,7 @@ export default {
   display: flex;
   padding: 15px 0;
   border-bottom: 1px dashed #e5e5e5;
+  position: relative;
 
   .img-zone{
     margin-right: 10px;
@@ -290,6 +291,8 @@ export default {
   }
   .count-zone{
     display: flex;
+    position: absolute;
+    right: 0;
     .count-total{
       background: #f4f4f4;
       border-radius: 3px;
