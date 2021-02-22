@@ -29,6 +29,16 @@ const routes = [
         path: '/sonList',
         name: 'SonList',
         component: () => import(/* webpackChunkName: "sonList" */ '../views/SonList.vue')
+      },
+      {
+        path: '/login',
+        name: 'Login',
+        component: () => import(/* webpackChunkName: "login" */ '../views/Login.vue')
+      },
+      {
+        path: '/register',
+        name: 'Register',
+        component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
       }
     ]
   }
