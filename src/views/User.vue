@@ -5,6 +5,7 @@
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>个人中心</el-breadcrumb-item>
     </el-breadcrumb>
+    <!--卡片视图区域-->
     <div class="card-zone">
       <el-card class="box-card">
         <div class="son-box">
@@ -169,8 +170,22 @@
           <div>分页按钮</div>
         </div>
       </el-card>
-      <div>111</div>
+      <div class="right-zone">
+        <div><img src="../assets/user_default.jpg"/></div>
+        <div class="bottom-zone">
+          <div class="username">葛雅婷</div>
+          <div>帖子总计：18</div>
+          <div>
+            操作：
+            <span class="operation">修改头像</span>
+            <span class="divider">|</span>
+            <span class="operation">修改密码</span>
+          </div>
+        </div>
+      </div>
     </div>
+    <!--修改头像对话框-->
+    <!--修改密码对话框-->
   </div>
 </template>
 
@@ -195,6 +210,9 @@ export default {
 }
 .topic-button{
   margin-top: 10px;
+}
+.son-item:first-child{
+  border-top: 1px dashed #e5e5e5;
 }
 .son-item{
   display: flex;
@@ -251,6 +269,31 @@ export default {
         margin: 0;
         padding: 0;
       }
+    }
+  }
+}
+.right-zone{
+  margin: 20px auto 0 auto;
+  .bottom-zone{
+    margin-top: 5px;
+    div{
+      font-size: 13px;
+      line-height: 150%;
+    }
+    .username{
+      //font-weight: bold;
+      font-size: 22px;
+      line-height: 140%;
+      padding: 5px 0 10px 0;
+    }
+    .divider{
+      padding: 0 5px;
+    }
+    .operation{
+      cursor: pointer;
+    }
+    .operation:hover{
+      color: red;
     }
   }
 }
