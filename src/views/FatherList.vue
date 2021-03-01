@@ -3,22 +3,21 @@
     <!--面包屑导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>父板块名称</el-breadcrumb-item>
+      <el-breadcrumb-item>{{fatherName}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="card-zone">
       <!--卡片视图区-->
       <el-card shadow="always" class="box-card">
         <div class="father-box">
-          <h3>父板块名称</h3>
+          <h3>{{fatherName}}</h3>
           <div class="father-num">
             <div class="num">
-              <div>今日：<strong>0</strong></div>
-              <div>总贴：<strong>0</strong></div>
+              <div>今日：<strong>{{fatherTodayNum}}</strong></div>
+              <div>总贴：<strong>{{fatherAllNum}}</strong></div>
             </div>
             <div class="son-num">
               <span>子板块：</span>
-              <span>子版块1&nbsp;&nbsp;</span>
-              <span>子版块2</span>
+              <span v-for="(son,index) in sonList" :key="index">{{son.module_name}}&nbsp;&nbsp;</span>
             </div>
           </div>
           <div class="topic-button">
@@ -27,159 +26,29 @@
           </div>
         </div>
         <div class="son-box">
-          <div class="son-item">
+          <div class="son-item" v-for="(content,index) in allContent" :key="index">
             <div class="img-zone">
               <a><img src="../assets/user_default.jpg"/></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
+                <span>[{{content.module_name}}]</span>
+                <span class="title">{{content.title}}</span>
               </div>
               <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
+                <span>楼主：{{content.username}}</span>
+                <span>{{content.create_time}}</span>
                 <span>最后回复：2021-12-23 23:12:23</span>
               </div>
             </div>
             <div class="count-zone">
               <div class="count-total">
                 <p>浏览</p>
-                <p>0</p>
+                <p>{{content.times}}</p>
               </div>
               <div class="count-total">
                 <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
+                <p>{{content.comments}}</p>
               </div>
             </div>
           </div>
@@ -201,6 +70,52 @@ export default {
   name: 'FatherList',
   components: {
     BoardList
+  },
+  data() {
+    return {
+      // 父板块id
+      fatherId: '',
+      // 父板块名称
+      fatherName: '',
+      // 父板块下面子版块列表
+      sonList: [],
+      // 父板块下面的所有帖子数
+      fatherAllNum: 0,
+      // 父板块下所有今日发布的帖子
+      fatherTodayNum: 0,
+      // 父板块下面的所有帖子
+      allContent: []
+    }
+  },
+  async created() {
+    this.fatherId = this.$route.params.id
+    const { data: res } = await this.$http.get('front/father.php', { params: { fatherId: this.fatherId } })
+    this.fatherName = res[0].father_module_name
+    this.sonList = res
+    this.getAllNum()
+    this.getTodayNum()
+    this.getAllContent()
+  },
+  methods: {
+    // 获取子板块下面所有的帖子
+    async getAllNum() {
+      for (const son of this.sonList) {
+        const { data: res } = await this.$http.get('front/allNum.php', { params: { sonId: son.id } })
+        this.fatherAllNum += Number(res.count_all)
+      }
+    },
+    // 获取子板块下面今日发布的帖子
+    async getTodayNum() {
+      for (const son of this.sonList) {
+        const { data: res } = await this.$http.get('front/todayNum.php', { params: { sonId: son.id } })
+        this.fatherTodayNum += Number(res.count_today)
+      }
+    },
+    // 获取该父板块下面的所有帖子
+    async getAllContent() {
+      const { data: res } = await this.$http.get('front/content_by_father.php', { params: { fatherId: this.fatherId } })
+      this.allContent = res
+    }
   }
 }
 </script>
