@@ -123,6 +123,11 @@ export default {
         color: red;
       }
     }
+    .article{
+      color: #333333;
+      font-size: 14px;
+      line-height: 180%;
+    }
   }
 }
 .top-zone{

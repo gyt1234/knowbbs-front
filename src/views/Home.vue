@@ -139,6 +139,12 @@ export default {
     line-height: 44px;
     color: #ffffff;
     font-size: 14px;
+    span{
+      cursor: pointer;
+    }
+    span:hover{
+      color: red;
+    }
   }
 }
 .el-footer{

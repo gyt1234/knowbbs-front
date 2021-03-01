@@ -3,152 +3,33 @@
     <div class="section">
       <div class="title">热门动态</div>
       <div class="content">
-        <div class="item">
-          <span class="item-title">[帖子请求请求群ssss]</span>
-          <span class="item-content">今天战队战斗中ssssssssssssssssssssssdddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题2ss]</span>
-          <span class="item-content">对对对</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题3]</span>
-          <span class="item-content">ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题4]</span>
-          <span class="item-content">fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子请求请求群ssss]</span>
-          <span class="item-content">今天战队战斗中ssssssssssssssssssssssdddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题2ss]</span>
-          <span class="item-content">对对对</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题3]</span>
-          <span class="item-content">ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题4]</span>
-          <span class="item-content">fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span>
+        <div class="item" v-for="(content, index) in hotConttent" :key="index">
+          <span class="item-title">[{{content.module_name}}]</span>
+          <span class="item-content">{{content.title}}</span>
         </div>
       </div>
     </div>
     <div class="section">
       <div class="title">最新文章</div>
       <div class="content">
-        <div class="item">
-          <span class="item-title">[帖子请求请求群ssss]</span>
-          <span class="item-content">今天战队战斗中ssssssssssssssssssssssdddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题2ss]</span>
-          <span class="item-content">对对对</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题3]</span>
-          <span class="item-content">ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题4]</span>
-          <span class="item-content">fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子请求请求群ssss]</span>
-          <span class="item-content">今天战队战斗中ssssssssssssssssssssssdddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题2ss]</span>
-          <span class="item-content">对对对</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题3]</span>
-          <span class="item-content">ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</span>
-        </div>
-        <div class="item">
-          <span class="item-title">[帖子标题4]</span>
-          <span class="item-content">fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff</span>
+        <div class="item" v-for="(content,index) in newContentList" :key="index">
+          <span class="item-title">[{{content.module_name}}]</span>
+          <span class="item-content">{{content.title}}</span>
         </div>
       </div>
     </div>
     <div class="section recommend-board">
       <div class="title">推荐板块</div>
       <div class="content">
-        <el-tag type="info">生活那点事</el-tag>
-        <el-tag type="info">娱乐八卦</el-tag>
-        <el-tag type="info">生活那点事</el-tag>
-        <el-tag type="info">娱乐八卦</el-tag>
-        <el-tag type="info">生活那点事</el-tag>
-        <el-tag type="info">娱乐八卦</el-tag>
-        <el-tag type="info">生活那点事</el-tag>
-        <el-tag type="info">娱乐八卦</el-tag>
-        <el-tag type="info">生活那点事</el-tag>
-        <el-tag type="info">娱乐八卦</el-tag>
+        <el-tag type="info" v-for="(recommend,index) in recommendBoards" :key="index">{{recommend.module_name}}</el-tag>
       </div>
     </div>
-    <div class="board">
-      <div class="board-title">民生</div>
+    <div class="board" v-for="(father,index) in allBoards" :key="index">
+      <div class="board-title">{{father.father_name}}</div>
       <div class="board-content">
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-      </div>
-    </div>
-    <div class="board">
-      <div class="board-title">民生</div>
-      <div class="board-content">
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-      </div>
-    </div>
-    <div class="board">
-      <div class="board-title">民生</div>
-      <div class="board-content">
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
-        </div>
-        <div class="son">
-          <div>百姓声音<span>(今日0)</span></div>
-          <div style="font-weight: normal">帖子：2</div>
+        <div class="son" v-for="(son,index) in father.sonArr" :key="index">
+          <div>{{son[0]}}<today :sonId="son[1]"/></div>
+          <div style="font-weight: normal"><all-num :sonId="son[1]"/></div>
         </div>
       </div>
     </div>
@@ -156,8 +37,76 @@
 </template>
 
 <script>
+import Today from '@/components/Today'
+import AllNum from '@/components/AllNum'
 export default {
-  name: 'Index'
+  name: 'Index',
+  components: {
+    Today,
+    AllNum
+  },
+  data() {
+    return {
+      // 所有的子板块
+      boardList: [],
+      // 父板块以及其下的子板块分类列表
+      allBoards: [],
+      // 推荐板块
+      recommendBoards: [],
+      // 最新文章列表
+      newContentList: [],
+      // 热门动态列表
+      hotConttent: []
+    }
+  },
+  async created () {
+    const { data: res } = await this.$http.get('admin/son.php')
+    this.boardList = res
+    this.handleBoards()
+    this.getRecommendBoards()
+    this.getNewContent()
+    this.getHotContent()
+  },
+  methods: {
+    // 将所有的板块分类
+    handleBoards() {
+      const tempArr = []
+      const newArr = []
+      for (let i = 0; i < this.boardList.length; i++) {
+        if (tempArr.indexOf(this.boardList[i].father_module_name) === -1) {
+          newArr.push({
+            father_name: this.boardList[i].father_module_name,
+            sonArr: [[this.boardList[i].module_name, this.boardList[i].id]]
+          })
+          tempArr.push(this.boardList[i].father_module_name)
+        } else {
+          for (let j = 0; j < newArr.length; j++) {
+            if (newArr[j].father_name === this.boardList[i].father_module_name) {
+              newArr[j].sonArr.push([this.boardList[i].module_name, this.boardList[i].id])
+              break
+            }
+          }
+        }
+      }
+      this.allBoards = newArr
+    },
+    // 获取推荐板块
+    async getRecommendBoards() {
+      const { data: res } = await this.$http.get('front/recommend_son.php')
+      this.recommendBoards = res
+    },
+    // 获取最新文章
+    async getNewContent() {
+      const { data: res } = await this.$http.get('front/new_content.php')
+      this.newContentList = res
+    },
+    // 获取热门动态
+    async getHotContent() {
+      const { data: res } = await this.$http.get('front/hot_content.php')
+      this.hotConttent = res
+      console.log(res)
+    }
+  }
 }
 </script>
 

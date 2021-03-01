@@ -29,11 +29,6 @@ export default {
     this.handleBoards()
   },
   methods: {
-    // 获取所有的板块
-    async getBoards() {
-      const { data: res } = await this.$http.get('admin/son.php')
-      this.boardList = res
-    },
     // 将所有的板块分类
     handleBoards() {
       const tempArr = []
