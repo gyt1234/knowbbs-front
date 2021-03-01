@@ -25,7 +25,7 @@
       </div>
     </div>
     <div class="board" v-for="(father,index) in allBoards" :key="index">
-      <div class="board-title">{{father.father_name}}</div>
+      <div class="board-title" @click="goFatherList(father.id)">{{father.father_name}}</div>
       <div class="board-content">
         <div class="son" v-for="(son,index) in father.sonArr" :key="index">
           <div>{{son[0]}}<today :sonId="son[1]"/></div>
@@ -75,6 +75,7 @@ export default {
       for (let i = 0; i < this.boardList.length; i++) {
         if (tempArr.indexOf(this.boardList[i].father_module_name) === -1) {
           newArr.push({
+            id: this.boardList[i].father_id,
             father_name: this.boardList[i].father_module_name,
             sonArr: [[this.boardList[i].module_name, this.boardList[i].id]]
           })
@@ -104,7 +105,10 @@ export default {
     async getHotContent() {
       const { data: res } = await this.$http.get('front/hot_content.php')
       this.hotConttent = res
-      console.log(res)
+    },
+    // 点击父板块名称进入父板块列表
+    goFatherList(id) {
+      this.$router.push({ name: 'FatherList', params: { id: id } })
     }
   }
 }
