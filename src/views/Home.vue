@@ -6,7 +6,7 @@
         <div class="menu-item" @click="toMain">首页</div>
         <div class="menu-item">主题
           <ul class="father-list">
-            <li v-for="father in fatherList" :key="father.id">{{father.module_name}}</li>
+            <li v-for="father in fatherList" :key="father.id" @click="goFatherList(father.id)">{{father.module_name}}</li>
           </ul>
         </div>
       </div>
@@ -14,9 +14,14 @@
         <el-input placeholder="搜索其实很简单" v-model="query"></el-input>
         <i class="el-icon-search"></i>
       </div>
-      <div class="login-zone">
-        <span>登录</span>
-        <span style="margin-left: 10px">注册</span>
+      <div class="login-zone" v-if="!isLogin">
+        <span @click="goLogin">登录</span>
+        <span style="margin-left: 10px" @click="goRegister">注册</span>
+      </div>
+      <div class="login-zone" v-else>
+        <span>欢迎您，{{uname}}</span>
+        <p style="padding: 0 5px;display: inline"> | </p>
+        <span @click="logout">退出</span>
       </div>
     </el-header>
     <el-main>
@@ -38,11 +43,20 @@ export default {
       // 搜索关键词
       query: '',
       // 父板块列表
-      fatherList: []
+      fatherList: [],
+      // 是否登录
+      isLogin: false,
+      // 用户名
+      uname: ''
     }
   },
   created () {
     this.getFatherList()
+    const username = window.sessionStorage.getItem('uname')
+    if (username) {
+      this.isLogin = true
+      this.uname = username
+    }
   },
   methods: {
     // 跳转首页
@@ -53,6 +67,25 @@ export default {
     async getFatherList() {
       const { data: res } = await this.$http.get('admin/father.php')
       this.fatherList = res
+    },
+    // 跳转到父板块列表页
+    goFatherList(id) {
+      this.$router.push({ name: 'FatherList', params: { id: id } })
+    },
+    // 跳转到登录页面
+    goLogin() {
+      this.$router.push('/login')
+    },
+    // 跳转到注册页面
+    goRegister() {
+      this.$router.push('/register')
+    },
+    // 退出登录
+    async logout() {
+      await this.$http.get('front/logout.php')
+      this.isLogin = false
+      this.$message.info('退出登录成功！')
+      window.sessionStorage.removeItem('uname')
     }
   }
 }

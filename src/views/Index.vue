@@ -21,7 +21,7 @@
     <div class="section recommend-board">
       <div class="title">推荐板块</div>
       <div class="content">
-        <el-tag type="info" v-for="(recommend,index) in recommendBoards" :key="index">{{recommend.module_name}}</el-tag>
+        <el-tag type="info" v-for="(recommend,index) in recommendBoards" :key="index" @click="goSonList(recommend.id)">{{recommend.module_name}}</el-tag>
       </div>
     </div>
     <div class="board" v-for="(father,index) in allBoards" :key="index">
