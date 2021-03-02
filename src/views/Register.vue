@@ -107,7 +107,7 @@ export default {
         if (!valid) return
         const { data: res } = await this.$http.post('front/register.php', this.registerForm)
         if (res.code !== 200) {
-          this.$message.error('登录失败,请直接登录')
+          this.$message.error('注册失败,请直接登录')
           this.$router.push('/login')
         } else {
           this.$message.success('注册成功')
