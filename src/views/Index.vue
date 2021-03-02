@@ -28,7 +28,7 @@
       <div class="board-title" @click="goFatherList(father.id)">{{father.father_name}}</div>
       <div class="board-content">
         <div class="son" v-for="(son,index) in father.sonArr" :key="index">
-          <div>{{son[0]}}<today :sonId="son[1]"/></div>
+          <div style='cursor: pointer;' @click="goSonList(son[1])">{{son[0]}}<today :sonId="son[1]"/></div>
           <div style="font-weight: normal"><all-num :sonId="son[1]"/></div>
         </div>
       </div>
@@ -109,6 +109,10 @@ export default {
     // 点击父板块名称进入父板块列表
     goFatherList(id) {
       this.$router.push({ name: 'FatherList', params: { id: id } })
+    },
+    // 点击子版块名称进入子版块列表
+    goSonList(id) {
+      this.$router.push({ name: 'SonList', params: { id: id } })
     }
   }
 }

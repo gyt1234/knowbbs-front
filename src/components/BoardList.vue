@@ -5,9 +5,9 @@
     </div>
     <div class="body-zone">
       <div class="board-list" v-for="(father,index) in allBoards" :key="index">
-        <div class="father-title">{{father.father_name}}</div>
+        <div class="father-title" @click="goFatherList(father.id)">{{father.father_name}}</div>
         <div class="son-list" v-for="(son,index) in father.sonArr" :key="index">
-          <div class="son-title">{{son}}</div>
+          <div class="son-title" @click="goSonList(son[1])">{{son[0]}}</div>
         </div>
       </div>
     </div>
@@ -36,20 +36,29 @@ export default {
       for (let i = 0; i < this.boardList.length; i++) {
         if (tempArr.indexOf(this.boardList[i].father_module_name) === -1) {
           newArr.push({
+            id: this.boardList[i].father_id,
             father_name: this.boardList[i].father_module_name,
-            sonArr: [this.boardList[i].module_name]
+            sonArr: [[this.boardList[i].module_name, this.boardList[i].id]]
           })
           tempArr.push(this.boardList[i].father_module_name)
         } else {
           for (let j = 0; j < newArr.length; j++) {
             if (newArr[j].father_name === this.boardList[i].father_module_name) {
-              newArr[j].sonArr.push(this.boardList[i].module_name)
+              newArr[j].sonArr.push([this.boardList[i].module_name, this.boardList[i].id])
               break
             }
           }
         }
       }
       this.allBoards = newArr
+    },
+    // 点击父板块名称进入父板块列表
+    goFatherList(id) {
+      this.$router.push({ name: 'FatherList', params: { id: id } })
+    },
+    // 点击子版块名称进入子版块列表
+    goSonList(id) {
+      this.$router.push({ name: 'SonList', params: { id: id } })
     }
   }
 }
@@ -75,6 +84,7 @@ export default {
     .son-list{
       margin: 5px 10px 10px 0;
       .son-title{
+        cursor: pointer;
         color: #666666;
         padding-left: 10px;
         line-height: 180%;
@@ -82,5 +92,8 @@ export default {
       }
     }
   }
+}
+.father-title{
+  cursor: pointer;
 }
 </style>

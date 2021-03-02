@@ -26,7 +26,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "fatherList" */ '../views/FatherList.vue')
       },
       {
-        path: '/sonList',
+        path: '/sonList/:id',
         name: 'SonList',
         component: () => import(/* webpackChunkName: "sonList" */ '../views/SonList.vue')
       },
