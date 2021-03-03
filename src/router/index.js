@@ -59,6 +59,11 @@ const routes = [
         path: '/publish/sonId/:sonId',
         name: 'PublishSon',
         component: () => import(/* webpackChunkName: "publish" */ '../views/Publish.vue')
+      },
+      {
+        path: '/Reply/:id',
+        name: 'Reply',
+        component: () => import(/* webpackChunkName: "reply" */ '../views/Reply.vue')
       }
     ]
   }

@@ -8,7 +8,7 @@
     </el-breadcrumb>
     <div class="content-zone">
       <div class="top-zone">
-        <el-button type="primary">回复</el-button>
+        <el-button type="primary" @click="goReply(contentId)">回复</el-button>
       </div>
       <div class="center-zone">
         <div class="left-zone">
@@ -32,32 +32,27 @@
         </div>
       </div>
       <!--评论区-->
-      <div class="center-zone">
+      <div class="center-zone" v-for="(reply,index) in replyList" :key="index">
         <div class="left-zone">
           <img src="../assets/user_default.jpg"/>
-          <div class="username">张三</div>
+          <div class="username">{{reply.uname}}</div>
         </div>
         <div class="right-zone">
           <div class="time">
-            <div>评论时间：2021-01-11 11:12:23</div>
+            <div>评论时间：{{reply.create_time}}</div>
             <div class="comment">
-              <span>1楼</span>
-              <span class="divider">|</span>
-              <span style="cursor: pointer">引用</span>
-              <span class="divider">|</span>
+<!--              <span>1楼</span>-->
+<!--              <span class="divider">|</span>-->
+<!--              <span style="cursor: pointer">引用</span>-->
+<!--              <span class="divider">|</span>-->
               <span style="cursor: pointer">删除</span>
             </div>
           </div>
-          <div class="article">
-            这是文章内容啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊1少时
-            诵诗书所所所所所所所所所所所少时诵诗书所所所所所所所所所所啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊飒飒飒飒是所所所所所所所所所所少时诵诗
-            书所所所所所所所所所所所所所
-          </div>
+          <div class="article" v-html="reply.content"></div>
         </div>
       </div>
       <div class="top-zone">
-        <el-button type="primary">回复</el-button>
+        <el-button type="primary" @click="goReply(contentId)">回复</el-button>
       </div>
     </div>
   </div>
@@ -71,18 +66,31 @@ export default {
       // 帖子Id
       contentId: '',
       // 帖子信息
-      contentInfo: {}
+      contentInfo: {},
+      // 回帖列表
+      replyList: []
     }
   },
   async created() {
     this.contentId = this.$route.params.id
     this.getContentInfo()
+    this.getReplyList()
   },
   methods: {
     // 获取帖子信息
     async getContentInfo() {
       const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.contentId } })
       this.contentInfo = res
+    },
+    // 点击跳转到回复页面
+    goReply(id) {
+      this.$router.push({ name: 'Reply', params: { id: id } })
+    },
+    // 获取帖子回复列表
+    async getReplyList() {
+      const { data: res } = await this.$http.get('front/get_reply.php', { params: { contentId: this.contentId } })
+      this.replyList = res
+      console.log(res)
     }
   }
 }
