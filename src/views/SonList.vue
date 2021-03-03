@@ -3,14 +3,14 @@
     <!--面包屑导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>{{sonInfo.father_name}}</el-breadcrumb-item>
-      <el-breadcrumb-item>{{sonInfo.module_name}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{sonInfo && sonInfo.father_name}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{sonInfo && sonInfo.module_name}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="card-zone">
       <!--卡片视图区-->
       <el-card shadow="always" class="box-card">
         <div class="father-box">
-          <h3>{{sonInfo.module_name}}</h3>
+          <h3>{{sonInfo && sonInfo.module_name}}</h3>
           <div class="father-num">
             <div class="num">
               <div>今日：<strong>{{todayNum}}</strong></div>
@@ -21,7 +21,7 @@
               <span>葛雅婷</span>
             </div>
             <div class="son-num">
-              <span>{{sonInfo.info}}</span>
+              <span>{{sonInfo && sonInfo.info}}</span>
             </div>
           </div>
           <div class="topic-button">

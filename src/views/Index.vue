@@ -4,7 +4,7 @@
       <div class="title">热门动态</div>
       <div class="content">
         <div class="item" v-for="(content, index) in hotConttent" :key="index">
-          <span class="item-title">[{{content.module_name}}]</span>
+          <span class="item-title" @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
           <span class="item-content">{{content.title}}</span>
         </div>
       </div>
@@ -13,7 +13,7 @@
       <div class="title">最新文章</div>
       <div class="content">
         <div class="item" v-for="(content,index) in newContentList" :key="index">
-          <span class="item-title">[{{content.module_name}}]</span>
+          <span class="item-title" @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
           <span class="item-content">{{content.title}}</span>
         </div>
       </div>
