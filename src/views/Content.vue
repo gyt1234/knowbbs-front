@@ -2,9 +2,9 @@
   <div>
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>父板块名称</el-breadcrumb-item>
-      <el-breadcrumb-item>子版块名称</el-breadcrumb-item>
-      <el-breadcrumb-item>帖子标题</el-breadcrumb-item>
+      <el-breadcrumb-item>{{contentInfo && contentInfo.father_name}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{contentInfo && contentInfo.son_name}}</el-breadcrumb-item>
+      <el-breadcrumb-item>{{contentInfo && contentInfo.title}}</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="content-zone">
       <div class="top-zone">
@@ -13,27 +13,22 @@
       <div class="center-zone">
         <div class="left-zone">
           <img src="../assets/user_default.jpg"/>
-          <div class="username">葛雅婷</div>
+          <div class="username">{{contentInfo && contentInfo.username}}</div>
         </div>
         <div class="right-zone">
           <div class="title-zone">
-            <div class="content-title">帖子标题</div>
+            <div class="content-title">{{contentInfo && contentInfo.title}}</div>
             <div class="comment">
-              <span>阅读：13</span>
+              <span>阅读：{{contentInfo && contentInfo.times}}</span>
               <span class="divider">|</span>
-              <span>回复：1</span>
+              <span>回复：{{contentInfo && contentInfo.comments}}</span>
             </div>
           </div>
           <div class="time">
-            <div>发布于：2021-01-11 11:12:23</div>
+            <div>发布于：{{contentInfo && contentInfo.create_time}}</div>
             <div class="lz">楼主</div>
           </div>
-          <div class="article">
-            这是文章内容啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊1少时
-            诵诗书所所所所所所所所所所所少时诵诗书所所所所所所所所所所啊啊
-            啊啊啊啊啊啊啊啊啊啊啊啊啊飒飒飒飒是所所所所所所所所所所少时诵诗
-            书所所所所所所所所所所所所所
-          </div>
+          <div class="article" v-html="contentInfo.content"></div>
         </div>
       </div>
       <!--评论区-->
@@ -70,7 +65,26 @@
 
 <script>
 export default {
-  name: 'Content'
+  name: 'Content',
+  data() {
+    return {
+      // 帖子Id
+      contentId: '',
+      // 帖子信息
+      contentInfo: {}
+    }
+  },
+  async created() {
+    this.contentId = this.$route.params.id
+    this.getContentInfo()
+  },
+  methods: {
+    // 获取帖子信息
+    async getContentInfo() {
+      const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.contentId } })
+      this.contentInfo = res
+    }
+  }
 }
 </script>
 
@@ -81,7 +95,7 @@ export default {
   margin-bottom: 10px;
   .left-zone{
     padding: 20px 0;
-    width: 40%;
+    width: 17%;
     border-right: 1px solid #e9e9e9;
     text-align: center;
     img{
@@ -100,6 +114,7 @@ export default {
   .right-zone{
     background-color: #ffffff;
     padding: 15px 20px;
+    width: 81%;
     .title-zone{
       border-bottom: 1px dashed #dddddd;
       display: flex;

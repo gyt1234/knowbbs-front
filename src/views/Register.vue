@@ -113,6 +113,7 @@ export default {
           this.$message.success('注册成功')
           this.$router.push('/home')
           window.sessionStorage.setItem('uname', res.username)
+          window.sessionStorage.setItem('uid', res.uid)
         }
       })
     },

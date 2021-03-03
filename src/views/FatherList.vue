@@ -33,7 +33,7 @@
             <div class="content-zone">
               <div class="content-title">
                 <span @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
-                <span class="title">{{content.title}}</span>
+                <span class="title" @click="goContent(content.id)">{{content.title}}</span>
               </div>
               <div class="content-info">
                 <span>楼主：{{content.username}}</span>
@@ -123,6 +123,10 @@ export default {
     // 跳转到发帖页面
     goPublish(id) {
       this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
+    },
+    // 跳转到帖子详情页面
+    goContent(id) {
+      this.$router.push({ name: 'Content', params: { id: id } })
     }
   }
 }

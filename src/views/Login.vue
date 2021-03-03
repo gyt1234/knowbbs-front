@@ -105,6 +105,7 @@ export default {
           this.$message.success('登录成功')
           this.$router.push('/home')
           window.sessionStorage.setItem('uname', res.username)
+          window.sessionStorage.setItem('uid', res.uid)
         }
       })
     },

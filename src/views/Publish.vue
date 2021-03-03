@@ -65,6 +65,7 @@ export default {
         ]
       },
       fatherId: '',
+      sonId: '',
       fatherName: '',
       // 下拉菜单
       options3: []
@@ -75,6 +76,7 @@ export default {
       this.fatherId = this.$route.params.fatherId
       this.getContentByFatherId()
     } else {
+      this.sonId = this.$route.params.sonId
       this.handleBoards()
     }
   },
@@ -87,7 +89,8 @@ export default {
           this.$message.error('请先登录再发布帖子')
           this.$router.push('/login')
         } else {
-          this.publishForm.user_id = window.sessionStorage.getItem('uname')
+          this.publishForm.user_id = window.sessionStorage.getItem('uid')
+          this.publishForm.content = this.publishForm.content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
           const { data: res } = await this.$http.post('front/publish.php', this.publishForm)
           if (res.code === 500) {
             this.$message.error('发布失败')
