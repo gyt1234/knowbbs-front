@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="topic-button">
-            <el-button type="primary">发帖</el-button>
+            <el-button type="primary" @click="goPublish(sonId)">发帖</el-button>
             <div>分页按钮</div>
           </div>
         </div>
@@ -36,7 +36,7 @@
             </div>
             <div class="content-zone">
               <div class="content-title">
-                <span class="title">{{content.title}}</span>
+                <span class="title" @click="goContent(content.id)">{{content.title}}</span>
               </div>
               <div class="content-info">
                 <span>楼主：{{content.username}}</span>
@@ -115,6 +115,14 @@ export default {
     async getContents() {
       const { data: res } = await this.$http.get('front/content_by_son.php', { params: { sonId: this.sonId } })
       this.contentList = res
+    },
+    // 跳转到帖子详情页
+    goContent(id) {
+      this.$router.push({ name: 'Content', params: { id: id } })
+    },
+    // 跳转到发帖页面
+    goPublish(id) {
+      this.$router.push({ name: 'PublishSon', params: { sonId: id } })
     }
   }
 }
@@ -190,6 +198,7 @@ export default {
       span{
         display: inline-block;
         padding-right: 10px;
+        cursor: pointer;
       }
       .title{
         font-weight: bold;

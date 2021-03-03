@@ -17,11 +17,11 @@
             </div>
             <div class="son-num">
               <span>子板块：</span>
-              <span v-for="(son,index) in sonList" :key="index">{{son.module_name}}&nbsp;&nbsp;</span>
+              <span style="cursor:pointer;" v-for="(son,index) in sonList" :key="index" @click="goSonList(son.id)">{{son.module_name}}&nbsp;&nbsp;</span>
             </div>
           </div>
           <div class="topic-button">
-            <el-button type="primary">发帖</el-button>
+            <el-button type="primary" @click="goPublish(fatherId)">发帖</el-button>
             <div>分页按钮</div>
           </div>
         </div>
@@ -32,7 +32,7 @@
             </div>
             <div class="content-zone">
               <div class="content-title">
-                <span>[{{content.module_name}}]</span>
+                <span @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
                 <span class="title">{{content.title}}</span>
               </div>
               <div class="content-info">
@@ -115,6 +115,14 @@ export default {
     async getAllContent() {
       const { data: res } = await this.$http.get('front/content_by_father.php', { params: { fatherId: this.fatherId } })
       this.allContent = res
+    },
+    // 点击子版块名称进入子版块列表
+    goSonList(id) {
+      this.$router.push({ name: 'SonList', params: { id: id } })
+    },
+    // 跳转到发帖页面
+    goPublish(id) {
+      this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
     }
   }
 }
@@ -190,6 +198,7 @@ export default {
       span{
         display: inline-block;
         padding-right: 10px;
+        cursor: pointer;
       }
       .title{
         font-weight: bold;

@@ -41,7 +41,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "register" */ '../views/Register.vue')
       },
       {
-        path: '/content',
+        path: '/content/:id',
         name: 'Content',
         component: () => import(/* webpackChunkName: "content" */ '../views/Content.vue')
       },
@@ -49,6 +49,16 @@ const routes = [
         path: '/user',
         name: 'User',
         component: () => import(/* webpackChunkName: "user" */ '../views/User.vue')
+      },
+      {
+        path: '/publish/fatherId/:fatherId',
+        name: 'PublishFather',
+        component: () => import(/* webpackChunkName: "publish" */ '../views/Publish.vue')
+      },
+      {
+        path: '/publish/sonId/:sonId',
+        name: 'PublishSon',
+        component: () => import(/* webpackChunkName: "publish" */ '../views/Publish.vue')
       }
     ]
   }
