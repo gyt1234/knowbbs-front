@@ -54,6 +54,14 @@
                 <p>{{content.comments}}</p>
               </div>
             </div>
+            <div class="icon-zone" v-show="content.username === username">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                <i class="el-icon-edit-outline"></i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <i class="el-icon-delete"></i>
+              </el-tooltip>
+            </div>
           </div>
         </div>
         <div class="topic-button">
@@ -85,11 +93,14 @@ export default {
       // 子版块下面帖子总数
       allNum: 0,
       // 子版块下面今日发帖数
-      todayNum: 0
+      todayNum: 0,
+      // 当前登录用户名
+      username: ''
     }
   },
   created() {
     this.sonId = this.$route.params.id
+    this.username = window.sessionStorage.getItem('uname')
     this.getSonInfo()
     this.getTodayNum()
     this.getAllNum()
@@ -234,6 +245,17 @@ export default {
         padding: 0;
       }
     }
+  }
+}
+.icon-zone{
+  position: absolute;
+  top: 15px;
+  right: 120px;
+  .el-icon-edit-outline,
+  .el-icon-delete{
+    font-size: 20px;
+    color: rgba(72,143,206,1);
+    margin-right: 8px;
   }
 }
 </style>

@@ -45,7 +45,7 @@
 <!--              <span class="divider">|</span>-->
 <!--              <span style="cursor: pointer">引用</span>-->
 <!--              <span class="divider">|</span>-->
-              <span style="cursor: pointer">删除</span>
+              <span style="cursor: pointer" v-show="reply.uname === username ? true : false">删除</span>
             </div>
           </div>
           <div class="article" v-html="reply.content"></div>
@@ -68,11 +68,14 @@ export default {
       // 帖子信息
       contentInfo: {},
       // 回帖列表
-      replyList: []
+      replyList: [],
+      // 当前登录的用户名
+      username: ''
     }
   },
   async created() {
     this.contentId = this.$route.params.id
+    this.username = window.sessionStorage.getItem('uname')
     this.getContentInfo()
     this.getReplyList()
   },

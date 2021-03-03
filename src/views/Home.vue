@@ -84,8 +84,9 @@ export default {
     async logout() {
       await this.$http.get('front/logout.php')
       this.isLogin = false
-      this.$message.info('退出登录成功！')
       window.sessionStorage.removeItem('uname')
+      this.$router.push('/index')
+      this.$message.info('退出登录成功！')
     }
   }
 }

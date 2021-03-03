@@ -51,6 +51,14 @@
                 <p>{{content.comments}}</p>
               </div>
             </div>
+            <div class="icon-zone" v-show="content.username === username">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                <i class="el-icon-edit-outline"></i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <i class="el-icon-delete"></i>
+              </el-tooltip>
+            </div>
           </div>
         </div>
         <div class="topic-button">
@@ -84,11 +92,14 @@ export default {
       // 父板块下所有今日发布的帖子
       fatherTodayNum: 0,
       // 父板块下面的所有帖子
-      allContent: []
+      allContent: [],
+      // 当前登录用户名
+      username: ''
     }
   },
   async created() {
     this.fatherId = this.$route.params.id
+    this.username = window.sessionStorage.getItem('uname')
     const { data: res } = await this.$http.get('front/father.php', { params: { fatherId: this.fatherId } })
     this.fatherName = res[0].father_module_name
     this.sonList = res
@@ -238,6 +249,17 @@ export default {
         padding: 0;
       }
     }
+  }
+}
+.icon-zone{
+  position: absolute;
+  top: 15px;
+  right: 120px;
+  .el-icon-edit-outline,
+  .el-icon-delete{
+    font-size: 20px;
+    color: rgba(72,143,206,1);
+    margin-right: 8px;
   }
 }
 </style>
