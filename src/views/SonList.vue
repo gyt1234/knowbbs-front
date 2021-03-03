@@ -32,7 +32,7 @@
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in contentList" :key="index">
             <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
+              <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -134,6 +134,10 @@ export default {
     // 跳转到发帖页面
     goPublish(id) {
       this.$router.push({ name: 'PublishSon', params: { sonId: id } })
+    },
+    // 点击跳转到个人中心
+    goUser(id) {
+      this.$router.push({ name: 'User', params: { id: id } })
     }
   }
 }
@@ -199,6 +203,7 @@ export default {
     img{
       width: 45px;
       height: 45px;
+      cursor: pointer;
     }
   }
   .content-zone{

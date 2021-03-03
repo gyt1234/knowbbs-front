@@ -28,7 +28,7 @@
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in allContent" :key="index">
             <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
+              <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -138,6 +138,10 @@ export default {
     // 跳转到帖子详情页面
     goContent(id) {
       this.$router.push({ name: 'Content', params: { id: id } })
+    },
+    // 点击跳转到个人中心
+    goUser(id) {
+      this.$router.push({ name: 'User', params: { id: id } })
     }
   }
 }

@@ -12,7 +12,7 @@
       </div>
       <div class="center-zone">
         <div class="left-zone">
-          <img src="../assets/user_default.jpg"/>
+          <img src="../assets/user_default.jpg" @click="goUser(contentInfo.uid)"/>
           <div class="username">{{contentInfo && contentInfo.username}}</div>
         </div>
         <div class="right-zone">
@@ -34,7 +34,7 @@
       <!--评论区-->
       <div class="center-zone" v-for="(reply,index) in replyList" :key="index">
         <div class="left-zone">
-          <img src="../assets/user_default.jpg"/>
+          <img src="../assets/user_default.jpg" @click="goUser(reply.uid)"/>
           <div class="username">{{reply.uname}}</div>
         </div>
         <div class="right-zone">
@@ -93,7 +93,10 @@ export default {
     async getReplyList() {
       const { data: res } = await this.$http.get('front/get_reply.php', { params: { contentId: this.contentId } })
       this.replyList = res
-      console.log(res)
+    },
+    // 点击跳转到个人中心
+    goUser(id) {
+      this.$router.push({ name: 'User', params: { id: id } })
     }
   }
 }

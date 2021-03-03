@@ -9,160 +9,37 @@
     <div class="card-zone">
       <el-card class="box-card">
         <div class="son-box">
-          <div class="son-item">
+          <div class="son-item" v-for="(content,index) in contentList" :key="index">
             <div class="img-zone">
               <a><img src="../assets/user_default.jpg"/></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
+                <span class="title" @click="goContent(content.id)">{{content.title}}</span>
               </div>
               <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
+                <span>楼主：{{content.username}}</span>
+                <span>{{content.create_time}}</span>
                 <span>最后回复：2021-12-23 23:12:23</span>
               </div>
             </div>
             <div class="count-zone">
               <div class="count-total">
                 <p>浏览</p>
-                <p>0</p>
+                <p>{{content.times}}</p>
               </div>
               <div class="count-total">
                 <p>回复</p>
-                <p>0</p>
+                <p>{{content.comments}}</p>
               </div>
             </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
-            </div>
-          </div>
-          <div class="son-item">
-            <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span>[新手上路]</span>
-                <span class="title">论坛今天可以注册啦！</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：葛雅婷</span>
-                <span>2021-09-09 12:21:34</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>0</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>0</p>
-              </div>
+            <div class="icon-zone" v-show="content.username === username">
+              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
+                <i class="el-icon-edit-outline"></i>
+              </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <i class="el-icon-delete"></i>
+              </el-tooltip>
             </div>
           </div>
         </div>
@@ -191,7 +68,33 @@
 
 <script>
 export default {
-  name: 'User'
+  name: 'User',
+  data() {
+    return {
+      // 用户id
+      user_id: '',
+      // 当前登录的用户名
+      username: '',
+      // 该用户发布的帖子列表
+      contentList: []
+    }
+  },
+  created() {
+    this.user_id = this.$route.params.id
+    this.username = window.sessionStorage.getItem('uname')
+    this.getContentByUserId()
+  },
+  methods: {
+    // 获取该用户下面的所有帖子
+    async getContentByUserId() {
+      const { data: res } = await this.$http.get('front/content_by_user.php', { params: { user_id: this.user_id } })
+      this.contentList = res
+    },
+    // 跳转到帖子详情页
+    goContent(id) {
+      this.$router.push({ name: 'Content', params: { id: id } })
+    }
+  }
 }
 </script>
 
@@ -238,6 +141,7 @@ export default {
       }
       .title{
         font-weight: bold;
+        cursor: pointer;
       }
     }
     .content-info{
@@ -295,6 +199,17 @@ export default {
     .operation:hover{
       color: red;
     }
+  }
+}
+.icon-zone{
+  position: absolute;
+  top: 15px;
+  right: 120px;
+  .el-icon-edit-outline,
+  .el-icon-delete{
+    font-size: 20px;
+    color: rgba(72,143,206,1);
+    margin-right: 8px;
   }
 }
 </style>
