@@ -19,7 +19,7 @@
         <span style="margin-left: 10px" @click="goRegister">注册</span>
       </div>
       <div class="login-zone" v-else>
-        <span>欢迎您，{{uname}}</span>
+        <span @click="goUser(user_id)">欢迎您，{{uname}}</span>
         <p style="padding: 0 5px;display: inline"> | </p>
         <span @click="logout">退出</span>
       </div>
@@ -47,10 +47,13 @@ export default {
       // 是否登录
       isLogin: false,
       // 用户名
-      uname: ''
+      uname: '',
+      // 当前登录用户名的id
+      user_id: ''
     }
   },
   created () {
+    this.user_id = window.sessionStorage.getItem('uid')
     this.getFatherList()
     const username = window.sessionStorage.getItem('uname')
     if (username) {
@@ -87,6 +90,10 @@ export default {
       window.sessionStorage.removeItem('uname')
       this.$router.push('/index')
       this.$message.info('退出登录成功！')
+    },
+    // 跳转到用户中心
+    goUser(id) {
+      this.$router.push({ name: 'User', params: { id: id } })
     }
   }
 }
