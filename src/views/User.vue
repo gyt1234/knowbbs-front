@@ -20,7 +20,6 @@
               <div class="content-info">
                 <span>楼主：{{content.username}}</span>
                 <span>{{content.create_time}}</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
               </div>
             </div>
             <div class="count-zone">
@@ -48,10 +47,10 @@
         </div>
       </el-card>
       <div class="right-zone">
-        <div><img src="../assets/user_default.jpg"/></div>
+        <div><img src="../assets/user_default.jpg" /></div>
         <div class="bottom-zone">
-          <div class="username">葛雅婷</div>
-          <div>帖子总计：18</div>
+          <div class="username">{{userInfo.name}}</div>
+          <div>帖子总计：{{userNum}}</div>
           <div>
             操作：
             <span class="operation" @click="showPhotoVisible = true">修改头像</span>
@@ -94,6 +93,8 @@ export default {
   name: 'User',
   data() {
     return {
+      // 用户发帖总数
+      userNum: 0,
       // 用户id
       user_id: '',
       // 当前登录的用户名
@@ -120,17 +121,21 @@ export default {
           { required: true, message: '请输入新密码', trigger: 'blur' },
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
-      }
+      },
+      // 用户信息
+      userInfo: {}
     }
   },
   created() {
     this.user_id = this.$route.params.id
     this.username = window.sessionStorage.getItem('uname')
     this.getContentByUserId()
+    this.getUserInfo()
+    this.getUserNum()
   },
   methods: {
     // 修改头像逻辑
-    async updatePhoto(e) {
+    async updatePhoto() {
       const uImg = document.getElementById('photo').files
       const formdata = new FormData()
       formdata.append('id', this.user_id)
@@ -141,6 +146,12 @@ export default {
       } else {
         this.$message.error('头像更新失败')
       }
+      this.showPhotoVisible = false
+    },
+    // 根据用户id获取用户信息
+    async getUserInfo() {
+      const { data: res } = await this.$http.get('front/get_user.php', { params: { user_id: this.user_id } })
+      this.userInfo = res
     },
     // 修改密码逻辑
     async updatePass() {
@@ -165,6 +176,11 @@ export default {
       const { data: res } = await this.$http.get('front/content_by_user.php', { params: { user_id: this.user_id } })
       this.contentList = res
     },
+    // 获取该用户发帖总数
+    async getUserNum() {
+      const { data: res } = await this.$http.get('front/userNum.php', { params: { id: this.user_id } })
+      this.userNum = res.count_all
+    },
     // 跳转到帖子详情页
     goContent(id) {
       this.$router.push({ name: 'Content', params: { id: id } })
@@ -173,6 +189,7 @@ export default {
     goUpdateContent(id) {
       this.$router.push({ name: 'UpdateContent', params: { id: id } })
     },
+    // 通过帖子id删帖
     async deleteContentById(id) {
       // 弹框询问是否删除
       const confirmResult = await this.$confirm('此操作将永久删除该帖子, 是否继续?', '提示', {
@@ -308,7 +325,7 @@ export default {
 }
 .icon-zone{
   position: absolute;
-  top: 15px;
+  top: 40px;
   right: 120px;
   .el-icon-edit-outline,
   .el-icon-delete{

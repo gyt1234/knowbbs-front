@@ -41,7 +41,6 @@
               <div class="content-info">
                 <span>楼主：{{content.username}}</span>
                 <span>{{content.create_time}}</span>
-                <span>最后回复：2021-12-23 23:12:23</span>
               </div>
             </div>
             <div class="count-zone">
@@ -280,7 +279,7 @@ export default {
 }
 .icon-zone{
   position: absolute;
-  top: 15px;
+  top: 40px;
   right: 120px;
   .el-icon-edit-outline,
   .el-icon-delete{

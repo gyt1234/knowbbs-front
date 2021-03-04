@@ -79,6 +79,7 @@ export default {
   },
   async created() {
     this.contentId = this.$route.params.id
+    this.addTimes()
     this.username = window.sessionStorage.getItem('uname')
     this.getContentInfo()
     this.getReplyList()
@@ -102,6 +103,7 @@ export default {
     goUser(id) {
       this.$router.push({ name: 'User', params: { id: id } })
     },
+    // 根据回复id删除该回复
     async deleteContentById(id) {
       // 弹框询问是否删除
       const confirmResult = await this.$confirm('此操作将永久删除该回复, 是否继续?', '提示', {
@@ -120,6 +122,10 @@ export default {
       }
       this.$message.success('删除回复成功！')
       this.getReplyList()
+    },
+    // 进入帖子详情页，使得帖子浏览量+1
+    async addTimes() {
+      await this.$http.get('front/add_times.php', { params: { contentId: this.contentId } })
     }
   }
 }

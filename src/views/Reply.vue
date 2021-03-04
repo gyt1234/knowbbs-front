@@ -63,6 +63,8 @@ export default {
             this.$message.error('回复失败')
           } else {
             this.$message.success('回复成功')
+            // 使得帖子的评论数+1
+            await this.$http.get('front/add_comments.php', { params: { contentId: this.replyForm.content_id } })
             this.$router.go(-1)
           }
         }
