@@ -54,15 +54,38 @@
           <div>帖子总计：18</div>
           <div>
             操作：
-            <span class="operation">修改头像</span>
+            <span class="operation" @click="showPhotoVisible = true">修改头像</span>
             <span class="divider">|</span>
-            <span class="operation">修改密码</span>
+            <span class="operation" @click="showPassVisible = true">修改密码</span>
           </div>
         </div>
       </div>
     </div>
     <!--修改头像对话框-->
+    <el-dialog title="更换头像" :visible.sync="showPhotoVisible" width="40%">
+      <div>原头像：</div>
+      <div class="img-update"><img src="../assets/user_default.jpg"/></div>
+      <input type="file" name="photo" id="photo"/>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updatePhoto">确 定</el-button>
+       <el-button @click="showPhotoVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
     <!--修改密码对话框-->
+    <el-dialog title="修改密码" :visible.sync="showPassVisible" width="40%">
+      <el-form ref="passFormRef" label-width="100px" :model="passForm" :rules="passFormRules">
+        <el-form-item prop="oldPass" label="原密码：">
+          <el-input type="password" v-model="passForm.oldPass" placeholder="请输入原密码"/>
+        </el-form-item>
+        <el-form-item prop="newPass" label="新密码：">
+          <el-input type="password" v-model="passForm.newPass" placeholder="请输入新密码"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updatePass">确 定</el-button>
+       <el-button @click="showPassVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -76,7 +99,28 @@ export default {
       // 当前登录的用户名
       username: '',
       // 该用户发布的帖子列表
-      contentList: []
+      contentList: [],
+      // 修改头像的对话框的显示与隐藏
+      showPhotoVisible: false,
+      // 修改密码的对话框的显示与隐藏
+      showPassVisible: false,
+      // 修改密码表单
+      passForm: {
+        oldPass: '',
+        newPass: '',
+        user_id: ''
+      },
+      // 修改密码表单规则
+      passFormRules: {
+        oldPass: [
+          { required: true, message: '请输入原密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+        ],
+        newPass: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
+        ]
+      }
     }
   },
   created() {
@@ -85,6 +129,37 @@ export default {
     this.getContentByUserId()
   },
   methods: {
+    // 修改头像逻辑
+    async updatePhoto(e) {
+      const uImg = document.getElementById('photo').files
+      const formdata = new FormData()
+      formdata.append('id', this.user_id)
+      formdata.append('uImg', uImg[0])
+      const { data: res } = await this.$http.post('front/update_photo.php', formdata)
+      if (res.code === 200) {
+        this.$message.success('头像更新成功')
+      } else {
+        this.$message.error('头像更新失败')
+      }
+    },
+    // 修改密码逻辑
+    async updatePass() {
+      this.$refs.passFormRef.validate(async valid => {
+        if (!valid) return
+        if (this.passForm.oldPass === window.sessionStorage.getItem('pw')) {
+          this.passForm.user_id = this.user_id
+          const { data: res } = await this.$http.post('front/update_pass.php', this.passForm)
+          if (res.code === 200) {
+            this.$message.success('修改密码成功')
+          } else {
+            this.$message.error('修改密码失败')
+          }
+          this.showPassVisible = false
+        } else {
+          this.$message.error('请输入正确的原密码')
+        }
+      })
+    },
     // 获取该用户下面的所有帖子
     async getContentByUserId() {
       const { data: res } = await this.$http.get('front/content_by_user.php', { params: { user_id: this.user_id } })
@@ -122,6 +197,13 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.img-update{
+  margin-bottom: 10px;
+  img{
+    width: 200px;
+    height: 200px;
+  }
+}
 .card-zone{
   display: flex;
   background: rgba(252,252,252,1);
