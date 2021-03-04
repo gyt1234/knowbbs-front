@@ -30,7 +30,8 @@
           </el-input>
         </el-form-item>
         <el-form-item class="btns">
-          <el-button type="primary" @click="publish">发帖</el-button>
+          <el-button v-if="routeName === 'UpdateContent'" type="primary" @click="updateContent">发帖</el-button>
+          <el-button v-else type="primary" @click="publish">发帖</el-button>
           <el-button type="info" @click="resetPublishForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -68,19 +69,55 @@ export default {
       sonId: '',
       fatherName: '',
       // 下拉菜单
-      options3: []
+      options3: [],
+      // 当前修改的帖子id
+      contentId: '',
+      routeName: ''
     }
   },
   created() {
+    this.routeName = this.$route.name
+    console.log(this.routeName)
     if (this.$route.name === 'PublishFather') {
       this.fatherId = this.$route.params.fatherId
       this.getContentByFatherId()
-    } else {
+    } else if (this.$route.name === 'PublishSon') {
       this.sonId = this.$route.params.sonId
       this.handleBoards()
+    } else {
+      this.contentId = this.$route.params.id
+      this.handleBoards()
+      this.getContentInfo()
     }
   },
   methods: {
+    // 根据帖子id获取帖子信息
+    async getContentInfo() {
+      const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.contentId } })
+      this.publishForm.module_id = res.sonId
+      this.publishForm.title = res.title
+      this.publishForm.content = res.content
+    },
+    // 修改帖子
+    updateContent() {
+      this.$refs.publishFormRef.validate(async valid => {
+        if (!valid) return
+        if (!window.sessionStorage.getItem('uname')) {
+          this.$message.error('请先登录再修改帖子')
+          this.$router.push('/login')
+        } else {
+          this.publishForm.contentId = this.contentId
+          this.publishForm.content = this.publishForm.content.replace(/\r\n/g, '<br/>').replace(/\n/g, '<br/>').replace(/\s/g, '&nbsp;')
+          const { data: res } = await this.$http.post('front/update_content.php', this.publishForm)
+          if (res.code === 500) {
+            this.$message.error('编辑失败')
+          } else {
+            this.$message.success('编辑成功')
+            this.$router.push('/index')
+          }
+        }
+      })
+    },
     // 发帖逻辑
     publish() {
       this.$refs.publishFormRef.validate(async valid => {

@@ -56,7 +56,7 @@
             </div>
             <div class="icon-zone" v-show="content.username === username">
               <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                <i class="el-icon-edit-outline"></i>
+                <i class="el-icon-edit-outline" @click="goUpdateContent(content.id)"></i>
               </el-tooltip>
               <el-tooltip class="item" effect="dark" content="删除" placement="top">
                 <i class="el-icon-delete"></i>
@@ -138,6 +138,10 @@ export default {
     // 点击跳转到个人中心
     goUser(id) {
       this.$router.push({ name: 'User', params: { id: id } })
+    },
+    // 跳转到帖子编辑页面
+    goUpdateContent(id) {
+      this.$router.push({ name: 'UpdateContent', params: { id: id } })
     }
   }
 }
@@ -258,6 +262,7 @@ export default {
   right: 120px;
   .el-icon-edit-outline,
   .el-icon-delete{
+    cursor: pointer;
     font-size: 20px;
     color: rgba(72,143,206,1);
     margin-right: 8px;
