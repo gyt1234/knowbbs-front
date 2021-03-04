@@ -3,36 +3,24 @@
     <!--面包屑导航-->
     <el-breadcrumb separator-class="el-icon-arrow-right">
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item>{{fatherName}}</el-breadcrumb-item>
+      <el-breadcrumb-item>搜索页</el-breadcrumb-item>
     </el-breadcrumb>
     <div class="card-zone">
       <!--卡片视图区-->
       <el-card shadow="always" class="box-card">
         <div class="father-box">
-          <h3>{{fatherName}}</h3>
-          <div class="father-num">
-            <div class="num">
-              <div>今日：<strong>{{fatherTodayNum}}</strong></div>
-              <div>总贴：<strong>{{fatherAllNum}}</strong></div>
-            </div>
-            <div class="son-num">
-              <span>子板块：</span>
-              <span style="cursor:pointer;" v-for="(son,index) in sonList" :key="index" @click="goSonList(son.id)">{{son.module_name}}&nbsp;&nbsp;</span>
-            </div>
-          </div>
-          <div class="topic-button">
-            <el-button type="primary" @click="goPublish(fatherId)">发帖</el-button>
-            <div>分页按钮</div>
-          </div>
+          <h3>共有{{queryNum}}条匹配的帖子</h3>
+<!--          <div class="topic-button">-->
+<!--            <div>分页按钮</div>-->
+<!--          </div>-->
         </div>
         <div class="son-box">
-          <div class="son-item" v-for="(content,index) in allContent" :key="index">
+          <div class="son-item" v-for="(content,index) in allContents" :key="index">
             <div class="img-zone">
               <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
-                <span @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
                 <span class="title" @click="goContent(content.id)">{{content.title}}</span>
               </div>
               <div class="content-info">
@@ -60,10 +48,10 @@
             </div>
           </div>
         </div>
-        <div class="topic-button">
-          <el-button type="primary">发帖</el-button>
-          <div>分页按钮</div>
-        </div>
+<!--        <div class="topic-button">-->
+<!--          <el-button type="primary">发帖</el-button>-->
+<!--          <div>分页按钮</div>-->
+<!--        </div>-->
       </el-card>
       <!--右侧板块列表区域-->
       <board-list></board-list>
@@ -80,59 +68,36 @@ export default {
   },
   data() {
     return {
-      // 父板块id
-      fatherId: '',
-      // 父板块名称
-      fatherName: '',
-      // 父板块下面子版块列表
-      sonList: [],
-      // 父板块下面的所有帖子数
-      fatherAllNum: 0,
-      // 父板块下所有今日发布的帖子
-      fatherTodayNum: 0,
-      // 父板块下面的所有帖子
-      allContent: [],
+      // 搜索关键词
+      query: '',
+      // 搜索到的所有帖子列表
+      allContents: [],
+      // 获取含有关键词的帖子数
+      queryNum: 0,
       // 当前登录用户名
       username: ''
     }
   },
-  async created() {
-    this.fatherId = this.$route.params.id
+  created() {
+    this.query = this.$route.params.keywords
     this.username = window.sessionStorage.getItem('uname')
-    const { data: res } = await this.$http.get('front/father.php', { params: { fatherId: this.fatherId } })
-    this.fatherName = res[0].father_module_name
-    this.sonList = res
-    this.getAllNum()
-    this.getTodayNum()
-    this.getAllContent()
+    this.getQueryNum()
+    this.getAllContents()
   },
   methods: {
-    // 获取子板块下面所有的帖子
-    async getAllNum() {
-      for (const son of this.sonList) {
-        const { data: res } = await this.$http.get('front/allNum.php', { params: { sonId: son.id } })
-        this.fatherAllNum += Number(res.count_all)
-      }
+    // 获取含有关键词的帖子数
+    async getQueryNum() {
+      const { data: res } = await this.$http.get('front/search_num.php', { params: { keywords: this.query } })
+      this.queryNum = res.count_all
     },
-    // 获取子板块下面今日发布的帖子
-    async getTodayNum() {
-      for (const son of this.sonList) {
-        const { data: res } = await this.$http.get('front/todayNum.php', { params: { sonId: son.id } })
-        this.fatherTodayNum += Number(res.count_today)
-      }
-    },
-    // 获取该父板块下面的所有帖子
-    async getAllContent() {
-      const { data: res } = await this.$http.get('front/content_by_father.php', { params: { fatherId: this.fatherId } })
-      this.allContent = res
+    // 搜索所有含有关键词的帖子
+    async getAllContents() {
+      const { data: res } = await this.$http.get('front/search.php', { params: { keywords: this.query } })
+      this.allContents = res
     },
     // 点击子版块名称进入子版块列表
     goSonList(id) {
       this.$router.push({ name: 'SonList', params: { id: id } })
-    },
-    // 跳转到发帖页面
-    goPublish(id) {
-      this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
     },
     // 跳转到帖子详情页面
     goContent(id) {

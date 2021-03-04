@@ -69,6 +69,11 @@ const routes = [
         path: '/Reply/:id',
         name: 'Reply',
         component: () => import(/* webpackChunkName: "reply" */ '../views/Reply.vue')
+      },
+      {
+        path: '/search/:keywords',
+        name: 'Search',
+        component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue')
       }
     ]
   }

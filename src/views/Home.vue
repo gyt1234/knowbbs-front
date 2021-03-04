@@ -11,8 +11,8 @@
         </div>
       </div>
       <div class="search-zone">
-        <el-input placeholder="搜索其实很简单" v-model="query"></el-input>
-        <i class="el-icon-search"></i>
+        <el-input placeholder="搜索其实很简单" v-model="query" @change="goSearch(query)"></el-input>
+        <i class="el-icon-search" @click="goSearch(query)"></i>
       </div>
       <div class="login-zone" v-if="!isLogin">
         <span @click="goLogin">登录</span>
@@ -78,6 +78,12 @@ export default {
     // 跳转到登录页面
     goLogin() {
       this.$router.push('/login')
+    },
+    // 跳转到搜索页
+    goSearch(query) {
+      query = query.trimStart()
+      query = query.trimEnd()
+      this.$router.push({ name: 'Search', params: { keywords: query } })
     },
     // 跳转到注册页面
     goRegister() {
