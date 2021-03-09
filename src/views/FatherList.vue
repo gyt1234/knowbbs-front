@@ -22,7 +22,6 @@
           </div>
           <div class="topic-button">
             <el-button type="primary" @click="goPublish(fatherId)">发帖</el-button>
-            <div>分页按钮</div>
           </div>
         </div>
         <div class="son-box">
@@ -61,8 +60,18 @@
           </div>
         </div>
         <div class="topic-button">
-          <el-button type="primary">发帖</el-button>
-          <div>分页按钮</div>
+          <!-- 分页功能 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryInfo.pagenum"
+            :page-sizes="[2, 4, 10, 20]"
+            :page-size="queryInfo.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="fatherAllNum"
+            background
+          >
+          </el-pagination>
         </div>
       </el-card>
       <!--右侧板块列表区域-->
@@ -80,6 +89,12 @@ export default {
   },
   data() {
     return {
+      // 获取帖子列表的参数对象
+      queryInfo: {
+        fatherId: '',
+        pagenum: 1, // 当前的页数
+        pagesize: 2 // 当前每页显示多少条数据
+      },
       // 父板块id
       fatherId: '',
       // 父板块名称
@@ -98,6 +113,7 @@ export default {
   },
   async created() {
     this.fatherId = this.$route.params.id
+    this.queryInfo.fatherId = this.$route.params.id
     this.username = window.sessionStorage.getItem('uname')
     const { data: res } = await this.$http.get('front/father.php', { params: { fatherId: this.fatherId } })
     this.fatherName = res[0].father_module_name
@@ -123,8 +139,18 @@ export default {
     },
     // 获取该父板块下面的所有帖子
     async getAllContent() {
-      const { data: res } = await this.$http.get('front/content_by_father.php', { params: { fatherId: this.fatherId } })
+      const { data: res } = await this.$http.get('front/content_by_father.php', { params: this.queryInfo })
       this.allContent = res
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange (newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getAllContent()
+    },
+    // 监听 页码 改变的事件
+    handleCurrentChange (newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getAllContent()
     },
     // 点击子版块名称进入子版块列表
     goSonList(id) {
@@ -218,8 +244,8 @@ export default {
 }
 .topic-button{
   margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
+  //display: flex;
+  //justify-content: space-between;
 }
 .son-item{
   display: flex;
@@ -291,6 +317,24 @@ export default {
     color: rgba(72,143,206,1);
     margin-right: 8px;
     cursor: pointer;
+  }
+}
+/*分页按钮样式*/
+::v-deep{
+  .el-pagination button, .el-pagination span:not([class*=suffix]){
+    line-height: 52px;
+  }
+  .el-pagination .btn-prev{
+    margin-top: 12px;
+  }
+  .el-pagination .btn-next{
+    margin-top: 12px;
+  }
+  .el-pager{
+    margin-top: 12px;
+  }
+  .btn-next{
+    margin-top: 10px;
   }
 }
 </style>

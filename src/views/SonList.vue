@@ -26,7 +26,6 @@
           </div>
           <div class="topic-button">
             <el-button type="primary" @click="goPublish(sonId)">发帖</el-button>
-            <div>分页按钮</div>
           </div>
         </div>
         <div class="son-box">
@@ -64,8 +63,18 @@
           </div>
         </div>
         <div class="topic-button">
-          <el-button type="primary">发帖</el-button>
-          <div>分页按钮</div>
+          <!-- 分页功能 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryInfo.pagenum"
+            :page-sizes="[2, 4, 10, 20]"
+            :page-size="queryInfo.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="allNum"
+            background
+          >
+          </el-pagination>
         </div>
       </el-card>
       <!--右侧板块列表区域-->
@@ -83,6 +92,12 @@ export default {
   },
   data() {
     return {
+      // 获取帖子列表的参数对象
+      queryInfo: {
+        sonId: '',
+        pagenum: 1, // 当前的页数
+        pagesize: 2 // 当前每页显示多少条数据
+      },
       // 子版块id
       sonId: '',
       // 子版块信息
@@ -99,6 +114,7 @@ export default {
   },
   created() {
     this.sonId = this.$route.params.id
+    this.queryInfo.sonId = this.$route.params.id
     this.username = window.sessionStorage.getItem('uname')
     this.getSonInfo()
     this.getTodayNum()
@@ -114,7 +130,7 @@ export default {
     // 获取该子版块下的所有的帖子数
     async getAllNum() {
       const { data: res } = await this.$http.get('front/allNum.php', { params: { sonId: this.sonId } })
-      this.allNum = res.count_all
+      this.allNum = Number(res.count_all)
     },
     // 根据子板块Id查找今日发帖数
     async getTodayNum() {
@@ -123,8 +139,18 @@ export default {
     },
     // 获取该子版块下面的所有帖子
     async getContents() {
-      const { data: res } = await this.$http.get('front/content_by_son.php', { params: { sonId: this.sonId } })
+      const { data: res } = await this.$http.get('front/content_by_son.php', { params: this.queryInfo })
       this.contentList = res
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange (newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getContents()
+    },
+    // 监听 页码 改变的事件
+    handleCurrentChange (newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getContents()
     },
     // 跳转到帖子详情页
     goContent(id) {
@@ -287,6 +313,24 @@ export default {
     font-size: 20px;
     color: rgba(72,143,206,1);
     margin-right: 8px;
+  }
+}
+/*分页按钮样式*/
+::v-deep{
+  .el-pagination button, .el-pagination span:not([class*=suffix]){
+    line-height: 52px;
+  }
+  .el-pagination .btn-prev{
+    margin-top: 12px;
+  }
+  .el-pagination .btn-next{
+    margin-top: 12px;
+  }
+  .el-pager{
+    margin-top: 12px;
+  }
+  .btn-next{
+    margin-top: 10px;
   }
 }
 </style>

@@ -133,7 +133,7 @@ export default {
             this.$message.error('发布失败')
           } else {
             this.$message.success('发布成功')
-            this.$router.push('/index')
+            this.$router.go('-1')
           }
         }
       })
