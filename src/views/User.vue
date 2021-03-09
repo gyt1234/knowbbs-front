@@ -43,7 +43,18 @@
           </div>
         </div>
         <div class="topic-button">
-          <div>分页按钮</div>
+          <!-- 分页功能 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryInfo.pagenum"
+            :page-sizes="[5, 10, 20, 30]"
+            :page-size="queryInfo.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="userNum"
+            background
+          >
+          </el-pagination>
         </div>
       </el-card>
       <div class="right-zone">
@@ -93,6 +104,12 @@ export default {
   name: 'User',
   data() {
     return {
+      // 获取帖子列表的参数对象
+      queryInfo: {
+        user_id: '',
+        pagenum: 1, // 当前的页数
+        pagesize: 5 // 当前每页显示多少条数据
+      },
       // 用户发帖总数
       userNum: 0,
       // 用户id
@@ -128,6 +145,7 @@ export default {
   },
   created() {
     this.user_id = this.$route.params.id
+    this.queryInfo.user_id = this.$route.params.id
     this.username = window.sessionStorage.getItem('uname')
     this.getContentByUserId()
     this.getUserInfo()
@@ -173,13 +191,23 @@ export default {
     },
     // 获取该用户下面的所有帖子
     async getContentByUserId() {
-      const { data: res } = await this.$http.get('front/content_by_user.php', { params: { user_id: this.user_id } })
+      const { data: res } = await this.$http.get('front/content_by_user.php', { params: this.queryInfo })
       this.contentList = res
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange (newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getContentByUserId()
+    },
+    // 监听 页码 改变的事件
+    handleCurrentChange (newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getContentByUserId()
     },
     // 获取该用户发帖总数
     async getUserNum() {
       const { data: res } = await this.$http.get('front/userNum.php', { params: { id: this.user_id } })
-      this.userNum = res.count_all
+      this.userNum = Number(res.count_all)
     },
     // 跳转到帖子详情页
     goContent(id) {
@@ -333,6 +361,24 @@ export default {
     font-size: 20px;
     color: rgba(72,143,206,1);
     margin-right: 8px;
+  }
+}
+/*分页按钮样式*/
+::v-deep{
+  .el-pagination button, .el-pagination span:not([class*=suffix]){
+    line-height: 52px;
+  }
+  .el-pagination .btn-prev{
+    margin-top: 12px;
+  }
+  .el-pagination .btn-next{
+    margin-top: 12px;
+  }
+  .el-pager{
+    margin-top: 12px;
+  }
+  .btn-next{
+    margin-top: 10px;
   }
 }
 </style>

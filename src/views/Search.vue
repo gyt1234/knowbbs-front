@@ -48,10 +48,20 @@
             </div>
           </div>
         </div>
-<!--        <div class="topic-button">-->
-<!--          <el-button type="primary">发帖</el-button>-->
-<!--          <div>分页按钮</div>-->
-<!--        </div>-->
+        <div class="topic-button">
+          <!-- 分页功能 -->
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="queryInfo.pagenum"
+            :page-sizes="[2, 4, 10, 20]"
+            :page-size="queryInfo.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="queryNum"
+            background
+          >
+          </el-pagination>
+        </div>
       </el-card>
       <!--右侧板块列表区域-->
       <board-list></board-list>
@@ -68,6 +78,12 @@ export default {
   },
   data() {
     return {
+      // 获取帖子列表的参数对象
+      queryInfo: {
+        query: '',
+        pagenum: 1, // 当前的页数
+        pagesize: 2 // 当前每页显示多少条数据
+      },
       // 搜索关键词
       query: '',
       // 搜索到的所有帖子列表
@@ -80,6 +96,7 @@ export default {
   },
   created() {
     this.query = this.$route.params.keywords
+    this.queryInfo.query = this.$route.params.keywords
     this.username = window.sessionStorage.getItem('uname')
     this.getQueryNum()
     this.getAllContents()
@@ -88,12 +105,22 @@ export default {
     // 获取含有关键词的帖子数
     async getQueryNum() {
       const { data: res } = await this.$http.get('front/search_num.php', { params: { keywords: this.query } })
-      this.queryNum = res.count_all
+      this.queryNum = Number(res.count_all)
     },
     // 搜索所有含有关键词的帖子
     async getAllContents() {
-      const { data: res } = await this.$http.get('front/search.php', { params: { keywords: this.query } })
+      const { data: res } = await this.$http.get('front/search.php', { params: this.queryInfo })
       this.allContents = res
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange (newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getAllContents()
+    },
+    // 监听 页码 改变的事件
+    handleCurrentChange (newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getAllContents()
     },
     // 点击子版块名称进入子版块列表
     goSonList(id) {
@@ -256,6 +283,24 @@ export default {
     color: rgba(72,143,206,1);
     margin-right: 8px;
     cursor: pointer;
+  }
+}
+/*分页按钮样式*/
+::v-deep{
+  .el-pagination button, .el-pagination span:not([class*=suffix]){
+    line-height: 52px;
+  }
+  .el-pagination .btn-prev{
+    margin-top: 12px;
+  }
+  .el-pagination .btn-next{
+    margin-top: 12px;
+  }
+  .el-pager{
+    margin-top: 12px;
+  }
+  .btn-next{
+    margin-top: 10px;
   }
 }
 </style>
