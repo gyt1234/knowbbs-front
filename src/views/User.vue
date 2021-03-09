@@ -67,6 +67,8 @@
             <span class="operation" @click="showPhotoVisible = true">修改头像</span>
             <span class="divider">|</span>
             <span class="operation" @click="showPassVisible = true">修改密码</span>
+            <span class="divider">|</span>
+            <span class="operation" @click="showNameDialog">修改昵称</span>
           </div>
         </div>
       </div>
@@ -82,7 +84,7 @@
       </span>
     </el-dialog>
     <!--修改密码对话框-->
-    <el-dialog title="修改密码" :visible.sync="showPassVisible" width="40%">
+    <el-dialog title="修改密码" :visible.sync="showPassVisible" width="40%" @close="passDialogClosed">
       <el-form ref="passFormRef" label-width="100px" :model="passForm" :rules="passFormRules">
         <el-form-item prop="oldPass" label="原密码：">
           <el-input type="password" v-model="passForm.oldPass" placeholder="请输入原密码"/>
@@ -92,8 +94,23 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="updatePass">确 定</el-button>
+        <el-button @click="updatePass" type="primary">确 定</el-button>
        <el-button @click="showPassVisible = false">取 消</el-button>
+      </span>
+    </el-dialog>
+    <!--修改昵称对话框-->
+    <el-dialog title="修改昵称" :visible.sync="showNameVisible" width="40%" @close="nameDialogClosed">
+      <el-form ref="nameFormRef" label-width="100px" :model="nameForm" :rules="nameFormRules">
+        <el-form-item label="原昵称：">
+          <el-input v-model="nameForm.oldName" disabled/>
+        </el-form-item>
+        <el-form-item prop="newName" label="新昵称：">
+          <el-input v-model="nameForm.newName" placeholder="请输入新昵称"/>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="updateName" type="primary">确 定</el-button>
+       <el-button @click="showNameVisible = false">取 消</el-button>
       </span>
     </el-dialog>
   </div>
@@ -122,10 +139,18 @@ export default {
       showPhotoVisible: false,
       // 修改密码的对话框的显示与隐藏
       showPassVisible: false,
+      // 修改昵称的对话框的显示与隐藏
+      showNameVisible: false,
       // 修改密码表单
       passForm: {
         oldPass: '',
         newPass: '',
+        user_id: ''
+      },
+      // 修改昵称表单
+      nameForm: {
+        oldName: '',
+        newName: '',
         user_id: ''
       },
       // 修改密码表单规则
@@ -139,6 +164,13 @@ export default {
           { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
         ]
       },
+      // 修改昵称表单规则
+      nameFormRules: {
+        newName: [
+          { required: true, message: '请输入新昵称', trigger: 'blur' },
+          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+        ]
+      },
       // 用户信息
       userInfo: {}
     }
@@ -147,6 +179,7 @@ export default {
     this.user_id = this.$route.params.id
     this.queryInfo.user_id = this.$route.params.id
     this.username = window.sessionStorage.getItem('uname')
+    this.nameForm.oldName = window.sessionStorage.getItem('uname')
     this.getContentByUserId()
     this.getUserInfo()
     this.getUserNum()
@@ -171,6 +204,19 @@ export default {
       const { data: res } = await this.$http.get('front/get_user.php', { params: { user_id: this.user_id } })
       this.userInfo = res
     },
+    // 监听修改昵称对话框的关闭事件
+    nameDialogClosed () {
+      this.$refs.nameFormRef.resetFields()
+    },
+    // 监听修改密码对话框的关闭事件
+    passDialogClosed () {
+      this.$refs.passFormRef.resetFields()
+    },
+    // 点击打开修改昵称对话框
+    showNameDialog() {
+      this.showNameVisible = true
+      this.nameForm.oldName = window.sessionStorage.getItem('uname')
+    },
     // 修改密码逻辑
     async updatePass() {
       this.$refs.passFormRef.validate(async valid => {
@@ -187,6 +233,23 @@ export default {
         } else {
           this.$message.error('请输入正确的原密码')
         }
+      })
+    },
+    // 修改昵称逻辑
+    async updateName() {
+      this.$refs.nameFormRef.validate(async valid => {
+        if (!valid) return
+        this.nameForm.user_id = this.user_id
+        const { data: res } = await this.$http.post('front/update_name.php', this.nameForm)
+        if (res.code === 200) {
+          this.$message.success('修改昵称成功')
+          window.sessionStorage.setItem('uname', this.nameForm.newName)
+          this.getUserInfo()
+          this.getContentByUserId()
+        } else {
+          this.$message.error('修改昵称失败')
+        }
+        this.showNameVisible = false
       })
     },
     // 获取该用户下面的所有帖子
