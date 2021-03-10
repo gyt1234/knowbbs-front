@@ -6,7 +6,8 @@
       <el-breadcrumb-item>回复帖子</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card shadow="always" class="box-card">
-      <div class="title-zone">回复：{{contentInfo.username}} 发布的 {{contentInfo.title}}</div>
+      <div class="title-zone" v-if="flag">回复：{{contentInfo.username}} 发布的 {{contentInfo.title}}</div>
+      <div class="title-zone" v-else>回复“{{replyInfo.username}}”的评论</div>
       <el-form ref="replyFormRef" :model="replyForm" :rules="replyFormRules">
         <el-form-item prop="content">
           <el-input type="textarea" :rows="10" placeholder="请输入回复信息" v-model="replyForm.content">
@@ -30,7 +31,8 @@ export default {
       replyForm: {
         content: '',
         content_id: '',
-        user_id: ''
+        user_id: '',
+        quote_id: ''
       },
       // 表单的验证规则对象
       replyFormRules: {
@@ -40,12 +42,24 @@ export default {
         ]
       },
       // 帖子信息
-      contentInfo: {}
+      contentInfo: {},
+      // 回复信息
+      replyInfo: {},
+      // 判断是回复还是引用回复,true代表回复，false代表引用回复
+      flag: true
     }
   },
   created () {
     this.replyForm.content_id = this.$route.params.id
-    this.getContentInfo()
+    this.replyForm.quote_id = 0
+    if (this.$route.name === 'Reply') {
+      this.flag = true
+      this.getContentInfo()
+    } else {
+      this.flag = false
+      this.replyForm.quote_id = this.$route.params.replyId
+      this.getReplyInfo()
+    }
   },
   methods: {
     // 回帖逻辑
@@ -78,6 +92,11 @@ export default {
     async getContentInfo() {
       const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.replyForm.content_id } })
       this.contentInfo = res
+    },
+    // 获取引用信息
+    async getReplyInfo() {
+      const { data: res } = await this.$http.get('front/quote.php', { params: { reply_id: this.replyForm.quote_id } })
+      this.replyInfo = res
     }
   }
 }

@@ -68,7 +68,7 @@ export default {
     },
     // 获取所有的父板块
     async getFatherList() {
-      const { data: res } = await this.$http.get('admin/father.php')
+      const { data: res } = await this.$http.get('front/all_father.php')
       this.fatherList = res
     },
     // 跳转到父板块列表页

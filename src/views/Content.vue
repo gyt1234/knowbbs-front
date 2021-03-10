@@ -9,11 +9,23 @@
     <div class="content-zone">
       <div class="top-zone">
         <el-button type="primary" @click="goReply(contentId)">回复</el-button>
+        <!-- 分页功能 -->
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="queryInfo.pagenum"
+          :page-sizes="[1, 2, 5, 10]"
+          :page-size="queryInfo.pagesize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="allNum"
+          background
+        >
+        </el-pagination>
       </div>
       <div class="center-zone">
         <div class="left-zone">
           <img src="../assets/user_default.jpg" @click="goUser(contentInfo.uid)"/>
-          <div class="username">{{contentInfo && contentInfo.username}}</div>
+          <div class="username">作者：{{contentInfo && contentInfo.username}}</div>
         </div>
         <div class="right-zone">
           <div class="title-zone">
@@ -21,7 +33,7 @@
             <div class="comment">
               <span>阅读：{{contentInfo && contentInfo.times}}</span>
               <span class="divider">|</span>
-              <span>回复：{{contentInfo && contentInfo.comments}}</span>
+              <span>评论：{{contentInfo && contentInfo.comments}}</span>
             </div>
           </div>
           <div class="time">
@@ -32,28 +44,8 @@
         </div>
       </div>
       <!--评论区-->
-      <div class="center-zone" v-for="(reply,index) in replyList" :key="index">
-        <div class="left-zone">
-          <img src="../assets/user_default.jpg" @click="goUser(reply.uid)"/>
-          <div class="username">{{reply.uname}}</div>
-        </div>
-        <div class="right-zone">
-          <div class="time">
-            <div>评论时间：{{reply.create_time}}</div>
-            <div class="comment">
-<!--              <span>1楼</span>-->
-<!--              <span class="divider">|</span>-->
-<!--              <span style="cursor: pointer">引用</span>-->
-<!--              <span class="divider">|</span>-->
-              <span v-show="reply.uname === username ? true : false">
-                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <i class="el-icon-delete" @click="deleteContentById(reply.id)"></i>
-                </el-tooltip>
-              </span>
-            </div>
-          </div>
-          <div class="article" v-html="reply.content"></div>
-        </div>
+      <div class="reply-zone" v-for="(reply,index) in replyList" :key="index" v-show="reply.quote_id === '0'">
+        <quote :reply="reply" :contentId="contentId" @getReplyList="getReplyList"/>
       </div>
       <div class="top-zone">
         <el-button type="primary" @click="goReply(contentId)">回复</el-button>
@@ -63,22 +55,35 @@
 </template>
 
 <script>
+import Quote from '@/components/Quote'
 export default {
   name: 'Content',
+  components: { Quote },
   data() {
     return {
+      // 获取帖子列表的参数对象
+      queryInfo: {
+        contentId: '',
+        pagenum: 1, // 当前的页数
+        pagesize: 2 // 当前每页显示多少条数据
+      },
       // 帖子Id
       contentId: '',
       // 帖子信息
       contentInfo: {},
       // 回帖列表
       replyList: [],
+      // 引用回复列表
+      quoteList: [],
       // 当前登录的用户名
-      username: ''
+      username: '',
+      // 所有的回复数目
+      allNum: 0
     }
   },
   async created() {
     this.contentId = this.$route.params.id
+    this.queryInfo.contentId = this.$route.params.id
     this.addTimes()
     this.username = window.sessionStorage.getItem('uname')
     this.getContentInfo()
@@ -96,8 +101,19 @@ export default {
     },
     // 获取帖子回复列表
     async getReplyList() {
-      const { data: res } = await this.$http.get('front/get_reply.php', { params: { contentId: this.contentId } })
+      const { data: res } = await this.$http.get('front/get_reply.php', { params: this.queryInfo })
       this.replyList = res
+      this.allNum = res.length
+    },
+    // 监听 pagesize 改变的事件
+    handleSizeChange (newSize) {
+      this.queryInfo.pagesize = newSize
+      this.getReplyList()
+    },
+    // 监听 页码 改变的事件
+    handleCurrentChange (newPage) {
+      this.queryInfo.pagenum = newPage
+      this.getReplyList()
     },
     // 点击跳转到个人中心
     goUser(id) {
@@ -126,6 +142,15 @@ export default {
     // 进入帖子详情页，使得帖子浏览量+1
     async addTimes() {
       await this.$http.get('front/add_times.php', { params: { contentId: this.contentId } })
+    },
+    // 跳转到引用回复页面
+    goQuote(id, replyId) {
+      this.$router.push({ name: 'Quote', params: { id: id, replyId: replyId } })
+    },
+    // 获取该回复的引用评论
+    async getQuote(id) {
+      const { data: res } = await this.$http.get('front/get_quote.php', { params: { replyId: id } })
+      this.quoteList = res
     }
   }
 }
@@ -190,18 +215,67 @@ export default {
 }
 .top-zone{
   margin: 0 0 10px 0;
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
 }
 .el-button{
   height: 37px;
   width: 70px;
+  margin-top: 20px;
 }
 .divider{
   padding: 0 5px;
 }
-.el-icon-delete{
+.el-icon-delete,
+.el-icon-chat-line-square
+{
   font-size: 20px;
-  color: rgba(72,143,206,1);
+  color: rgba(136,136,136,1);
   cursor: pointer;
+  line-height: 150%;
+  margin-left: 10px;
+}
+.reply-zone{
+  background: #ffffff;
+  padding: 15px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  line-height: 180%;
+  color: #333333;
+
+  .reply-operation{
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(136,136,136);
+    .reply-name{
+      cursor: pointer;
+    }
+    .reply-icon{
+      cursor: pointer;
+    }
+    .reply-quote{
+      color: #0086b3;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+  }
+}
+/*分页按钮样式*/
+::v-deep{
+  .el-pagination button, .el-pagination span:not([class*=suffix]){
+    line-height: 52px;
+  }
+  .el-pagination .btn-prev{
+    margin-top: 12px;
+  }
+  .el-pagination .btn-next{
+    margin-top: 12px;
+  }
+  .el-pager{
+    margin-top: 12px;
+  }
+  .btn-next{
+    margin-top: 10px;
+  }
 }
 </style>

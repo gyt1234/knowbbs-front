@@ -60,7 +60,7 @@ export default {
     }
   },
   async created () {
-    const { data: res } = await this.$http.get('admin/son.php')
+    const { data: res } = await this.$http.get('front/all_son.php')
     this.boardList = res
     this.handleBoards()
     this.getRecommendBoards()
