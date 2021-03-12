@@ -108,13 +108,10 @@ export default {
         const { data: res } = await this.$http.post('front/register.php', this.registerForm)
         if (res.code !== 200) {
           this.$message.error('注册失败,请直接登录')
-          this.$router.push('/login')
         } else {
           this.$message.success('注册成功')
-          this.$router.push('/home')
-          window.sessionStorage.setItem('uname', res.username)
-          window.sessionStorage.setItem('uid', res.uid)
         }
+        this.$router.push('/login')
       })
     },
     // 点击重置按钮,重置登录表单

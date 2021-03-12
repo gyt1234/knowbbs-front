@@ -27,7 +27,7 @@
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in allContent" :key="index">
             <div class="img-zone">
-              <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
+              <a @click="goUser(content.uid)"><img :src=photo /></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -82,6 +82,11 @@
 
 <script>
 import BoardList from '../components/BoardList.vue'
+import user from '@/assets/user_default.jpg'
+import photo1 from '@/assets/photo1.jpg'
+import photo2 from '@/assets/photo2.jpg'
+import photo3 from '@/assets/photo3.jpg'
+import photo4 from '@/assets/photo4.jpg'
 export default {
   name: 'FatherList',
   components: {
@@ -89,6 +94,7 @@ export default {
   },
   data() {
     return {
+      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         fatherId: '',
@@ -141,6 +147,23 @@ export default {
     async getAllContent() {
       const { data: res } = await this.$http.get('front/content_by_father.php', { params: this.queryInfo })
       this.allContent = res
+      res.map(item => {
+        if (item.photo == null) {
+          this.photo = user
+        } else {
+          if (item.photo.includes('photo1')) {
+            this.photo = photo1
+          } else if (item.photo.includes('photo3')) {
+            this.photo = photo3
+          } else if (item.photo.includes('photo2')) {
+            this.photo = photo2
+          } else if (item.photo.includes('photo4')) {
+            this.photo = photo4
+          } else {
+            this.photo = user
+          }
+        }
+      })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {

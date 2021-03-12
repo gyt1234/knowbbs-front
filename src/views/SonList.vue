@@ -31,7 +31,7 @@
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in contentList" :key="index">
             <div class="img-zone">
-              <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
+              <a @click="goUser(content.uid)"><img :src=photo /></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -85,6 +85,11 @@
 
 <script>
 import BoardList from '@/components/BoardList'
+import photo1 from '@/assets/photo1.jpg'
+import photo2 from '@/assets/photo2.jpg'
+import photo3 from '@/assets/photo3.jpg'
+import photo4 from '@/assets/photo4.jpg'
+import userDefault from '@/assets/user_default.jpg'
 export default {
   name: 'SonList',
   components: {
@@ -92,6 +97,7 @@ export default {
   },
   data() {
     return {
+      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         sonId: '',
@@ -141,6 +147,23 @@ export default {
     async getContents() {
       const { data: res } = await this.$http.get('front/content_by_son.php', { params: this.queryInfo })
       this.contentList = res
+      res.forEach(item => {
+        if (item.photo === null) {
+          this.photo = userDefault
+        } else {
+          if (item.photo.includes('photo1')) {
+            this.photo = photo1
+          } else if (item.photo.includes('photo2')) {
+            this.photo = photo2
+          } else if (item.photo.includes('photo3')) {
+            this.photo = photo3
+          } else if (item.photo.includes('photo4')) {
+            this.photo = photo4
+          } else {
+            this.photo = userDefault
+          }
+        }
+      })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {

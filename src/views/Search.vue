@@ -10,14 +10,11 @@
       <el-card shadow="always" class="box-card">
         <div class="father-box">
           <h3>共有{{queryNum}}条匹配的帖子</h3>
-<!--          <div class="topic-button">-->
-<!--            <div>分页按钮</div>-->
-<!--          </div>-->
         </div>
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in allContents" :key="index">
             <div class="img-zone">
-              <a @click="goUser(content.uid)"><img src="../assets/user_default.jpg"/></a>
+              <a @click="goUser(content.uid)"><img :src=photo /></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -71,6 +68,11 @@
 
 <script>
 import BoardList from '../components/BoardList.vue'
+import photo1 from '@/assets/photo1.jpg'
+import photo2 from '@/assets/photo2.jpg'
+import photo3 from '@/assets/photo3.jpg'
+import photo4 from '@/assets/photo4.jpg'
+import userDefault from '@/assets/user_default.jpg'
 export default {
   name: 'FatherList',
   components: {
@@ -78,6 +80,7 @@ export default {
   },
   data() {
     return {
+      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         query: '',
@@ -111,6 +114,19 @@ export default {
     async getAllContents() {
       const { data: res } = await this.$http.get('front/search.php', { params: this.queryInfo })
       this.allContents = res
+      res.forEach(item => {
+        if (item.photo.includes('photo1')) {
+          this.photo = photo1
+        } else if (item.photo.includes('photo2')) {
+          this.photo = photo2
+        } else if (item.photo.includes('photo3')) {
+          this.photo = photo3
+        } else if (item.photo.includes('photo4')) {
+          this.photo = photo4
+        } else {
+          this.photo = userDefault
+        }
+      })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {

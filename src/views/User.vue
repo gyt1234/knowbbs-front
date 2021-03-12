@@ -11,7 +11,7 @@
         <div class="son-box">
           <div class="son-item" v-for="(content,index) in contentList" :key="index">
             <div class="img-zone">
-              <a><img src="../assets/user_default.jpg"/></a>
+              <a><img :src=photo /></a>
             </div>
             <div class="content-zone">
               <div class="content-title">
@@ -58,7 +58,7 @@
         </div>
       </el-card>
       <div class="right-zone">
-        <div><img src="../assets/user_default.jpg" /></div>
+        <div><img :src=photo /></div>
         <div class="bottom-zone">
           <div class="username">{{userInfo.name}}</div>
           <div>帖子总计：{{userNum}}</div>
@@ -76,7 +76,7 @@
     <!--修改头像对话框-->
     <el-dialog title="更换头像" :visible.sync="showPhotoVisible" width="40%">
       <div>原头像：</div>
-      <div class="img-update"><img src="../assets/user_default.jpg"/></div>
+      <div class="img-update"><img :src=photo /></div>
       <input type="file" name="photo" id="photo"/>
       <span slot="footer" class="dialog-footer">
         <el-button @click="updatePhoto">确 定</el-button>
@@ -117,10 +117,16 @@
 </template>
 
 <script>
+import userDefault from '@/assets/user_default.jpg'
+import photo1 from '@/assets/photo1.jpg'
+import photo2 from '@/assets/photo2.jpg'
+import photo3 from '@/assets/photo3.jpg'
+import photo4 from '@/assets/photo4.jpg'
 export default {
   name: 'User',
   data() {
     return {
+      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         user_id: '',
@@ -194,6 +200,8 @@ export default {
       const { data: res } = await this.$http.post('front/update_photo.php', formdata)
       if (res.code === 200) {
         this.$message.success('头像更新成功')
+        this.getUserInfo()
+        this.getContentByUserId()
       } else {
         this.$message.error('头像更新失败')
       }
@@ -203,6 +211,21 @@ export default {
     async getUserInfo() {
       const { data: res } = await this.$http.get('front/get_user.php', { params: { user_id: this.user_id } })
       this.userInfo = res
+      if (res.photo === null) {
+        this.photo = userDefault
+      } else {
+        if (res.photo.includes('photo1')) {
+          this.photo = photo1
+        } else if (res.photo.includes('photo2')) {
+          this.photo = photo2
+        } else if (res.photo.includes('photo3')) {
+          this.photo = photo3
+        } else if (res.photo.includes('photo4')) {
+          this.photo = photo4
+        } else {
+          this.photo = userDefault
+        }
+      }
     },
     // 监听修改昵称对话框的关闭事件
     nameDialogClosed () {
@@ -391,6 +414,10 @@ export default {
 }
 .right-zone{
   margin: 20px auto 0 auto;
+  img{
+    width: 200px;
+    height: 200px;
+  }
   .bottom-zone{
     margin-top: 5px;
     div{

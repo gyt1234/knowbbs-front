@@ -24,7 +24,7 @@
       </div>
       <div class="center-zone">
         <div class="left-zone">
-          <img src="../assets/user_default.jpg" @click="goUser(contentInfo.uid)"/>
+          <img :src=photo @click="goUser(contentInfo.uid)"/>
           <div class="username">作者：{{contentInfo && contentInfo.username}}</div>
         </div>
         <div class="right-zone">
@@ -56,11 +56,17 @@
 
 <script>
 import Quote from '@/components/Quote'
+import photo1 from '@/assets/photo1.jpg'
+import photo2 from '@/assets/photo2.jpg'
+import photo3 from '@/assets/photo3.jpg'
+import photo4 from '@/assets/photo4.jpg'
+import userDefault from '@/assets/user_default.jpg'
 export default {
   name: 'Content',
   components: { Quote },
   data() {
     return {
+      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         contentId: '',
@@ -100,6 +106,21 @@ export default {
     async getContentInfo() {
       const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.contentId } })
       this.contentInfo = res
+      if (res.photo === null) {
+        this.photo = userDefault
+      } else {
+        if (res.photo.includes('photo1')) {
+          this.photo = photo1
+        } else if (res.photo.includes('photo2')) {
+          this.photo = photo2
+        } else if (res.photo.includes('photo3')) {
+          this.photo = photo3
+        } else if (res.photo.includes('photo4')) {
+          this.photo = photo4
+        } else {
+          this.photo = userDefault
+        }
+      }
     },
     // 点击跳转到回复页面
     goReply(id) {
