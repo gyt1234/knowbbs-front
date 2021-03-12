@@ -103,10 +103,10 @@ export default {
           this.$router.push('/register')
         } else {
           this.$message.success('登录成功')
-          this.$router.push('/home')
           window.sessionStorage.setItem('uname', res.username)
           window.sessionStorage.setItem('uid', res.uid)
           window.sessionStorage.setItem('pw', res.pw)
+          this.$router.push('/home')
         }
       })
     },

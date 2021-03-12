@@ -5,7 +5,7 @@
       <div class="content">
         <div class="item" v-for="(content, index) in hotConttent" :key="index">
           <span class="item-title" @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
-          <span class="item-content">{{content.title}}</span>
+          <span class="item-content" @click="goContent(content.id)">{{content.title}}</span>
         </div>
       </div>
     </div>
@@ -14,7 +14,7 @@
       <div class="content">
         <div class="item" v-for="(content,index) in newContentList" :key="index">
           <span class="item-title" @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
-          <span class="item-content">{{content.title}}</span>
+          <span class="item-content" @click="goContent(content.id)">{{content.title}}</span>
         </div>
       </div>
     </div>
@@ -60,6 +60,8 @@ export default {
     }
   },
   async created () {
+    // this.$parent.uname = window.sessionStorage.getItem('uname')
+    // this.$parent.isLogin = true
     const { data: res } = await this.$http.get('front/all_son.php')
     this.boardList = res
     this.handleBoards()
@@ -113,6 +115,10 @@ export default {
     // 点击子版块名称进入子版块列表
     goSonList(id) {
       this.$router.push({ name: 'SonList', params: { id: id } })
+    },
+    // 点击帖子标题进入帖子详情页
+    goContent(id) {
+      this.$router.push({ name: 'Content', params: { id: id } })
     }
   }
 }

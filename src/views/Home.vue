@@ -94,6 +94,8 @@ export default {
       await this.$http.get('front/logout.php')
       this.isLogin = false
       window.sessionStorage.clear()
+      this.uname = ''
+      this.user_id = ''
       this.$router.push('/index')
       this.$message.info('退出登录成功！')
     },

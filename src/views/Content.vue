@@ -85,11 +85,17 @@ export default {
     this.contentId = this.$route.params.id
     this.queryInfo.contentId = this.$route.params.id
     this.addTimes()
+    this.getReplyNum()
     this.username = window.sessionStorage.getItem('uname')
     this.getContentInfo()
     this.getReplyList()
   },
   methods: {
+    // 获取所有的回复数目
+    async getReplyNum() {
+      const { data: res } = await this.$http.get('front/num_reply.php', { params: { contentId: this.contentId } })
+      this.allNum = Number(res.count)
+    },
     // 获取帖子信息
     async getContentInfo() {
       const { data: res } = await this.$http.get('front/content.php', { params: { contentId: this.contentId } })
@@ -103,7 +109,6 @@ export default {
     async getReplyList() {
       const { data: res } = await this.$http.get('front/get_reply.php', { params: this.queryInfo })
       this.replyList = res
-      this.allNum = res.length
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
