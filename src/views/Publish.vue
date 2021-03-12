@@ -113,7 +113,7 @@ export default {
             this.$message.error('编辑失败')
           } else {
             this.$message.success('编辑成功')
-            this.$router.push('/index')
+            this.$router.go('-1')
           }
         }
       })
@@ -153,7 +153,7 @@ export default {
     },
     // 将所有的板块分类
     async handleBoards() {
-      const { data: res } = await this.$http.get('admin/son.php')
+      const { data: res } = await this.$http.get('front/all_son.php')
       const tempArr = []
       const newArr = []
       for (let i = 0; i < res.length; i++) {

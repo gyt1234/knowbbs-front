@@ -25,38 +25,8 @@
           </div>
         </div>
         <div class="son-box">
-          <div class="son-item" v-for="(content,index) in allContent" :key="index">
-            <div class="img-zone">
-              <a @click="goUser(content.uid)"><img :src=photo /></a>
-            </div>
-            <div class="content-zone">
-              <div class="content-title">
-                <span @click="goSonList(content.sonId)">[{{content.module_name}}]</span>
-                <span class="title" @click="goContent(content.id)">{{content.title}}</span>
-              </div>
-              <div class="content-info">
-                <span>楼主：{{content.username}}</span>
-                <span>{{content.create_time}}</span>
-              </div>
-            </div>
-            <div class="count-zone">
-              <div class="count-total">
-                <p>浏览</p>
-                <p>{{content.times}}</p>
-              </div>
-              <div class="count-total">
-                <p>回复</p>
-                <p>{{content.comments}}</p>
-              </div>
-            </div>
-            <div class="icon-zone" v-show="content.username === username">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                <i class="el-icon-edit-outline" @click="goUpdateContent(content.id)"></i>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                <i class="el-icon-delete" @click="deleteContentById(content.id)"></i>
-              </el-tooltip>
-            </div>
+          <div v-for="(content,index) in allContent" :key="index">
+              <content-item :content=content @delete="deleteContentById($event,index)" :photo=photo />
           </div>
         </div>
         <div class="topic-button">
@@ -82,19 +52,15 @@
 
 <script>
 import BoardList from '../components/BoardList.vue'
-import user from '@/assets/user_default.jpg'
-import photo1 from '@/assets/photo1.jpg'
-import photo2 from '@/assets/photo2.jpg'
-import photo3 from '@/assets/photo3.jpg'
-import photo4 from '@/assets/photo4.jpg'
+import ContentItem from '@/components/ContentItem'
 export default {
   name: 'FatherList',
   components: {
-    BoardList
+    BoardList,
+    ContentItem
   },
   data() {
     return {
-      photo: '',
       // 获取帖子列表的参数对象
       queryInfo: {
         fatherId: '',
@@ -147,23 +113,6 @@ export default {
     async getAllContent() {
       const { data: res } = await this.$http.get('front/content_by_father.php', { params: this.queryInfo })
       this.allContent = res
-      res.map(item => {
-        if (item.photo == null) {
-          this.photo = user
-        } else {
-          if (item.photo.includes('photo1')) {
-            this.photo = photo1
-          } else if (item.photo.includes('photo3')) {
-            this.photo = photo3
-          } else if (item.photo.includes('photo2')) {
-            this.photo = photo2
-          } else if (item.photo.includes('photo4')) {
-            this.photo = photo4
-          } else {
-            this.photo = user
-          }
-        }
-      })
     },
     // 监听 pagesize 改变的事件
     handleSizeChange (newSize) {
@@ -182,22 +131,6 @@ export default {
     // 跳转到发帖页面
     goPublish(id) {
       this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
-    },
-    // 跳转到帖子详情页面
-    goContent(id) {
-      this.$router.push({ name: 'Content', params: { id: id } })
-    },
-    // 点击跳转到个人中心
-    goUser(id) {
-      if (this.username) {
-        this.$router.push({ name: 'User', params: { id: id } })
-      } else {
-        this.$router.push('/login')
-      }
-    },
-    // 跳转到帖子编辑页面
-    goUpdateContent(id) {
-      this.$router.push({ name: 'UpdateContent', params: { id: id } })
     },
     // 根据帖子id删除对应的帖子
     async deleteContentById(id) {
