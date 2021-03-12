@@ -62,7 +62,11 @@ export default {
     },
     // 点击跳转到个人中心
     goUser(id) {
-      this.$router.push({ name: 'User', params: { id: id } })
+      if (this.username) {
+        this.$router.push({ name: 'User', params: { id: id } })
+      } else {
+        this.$router.push('/login')
+      }
     },
     // 根据回复id删除该回复
     async deleteContentById(id) {

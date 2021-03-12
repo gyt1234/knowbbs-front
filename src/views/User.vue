@@ -62,7 +62,7 @@
         <div class="bottom-zone">
           <div class="username">{{userInfo.name}}</div>
           <div>帖子总计：{{userNum}}</div>
-          <div>
+          <div v-show="username && username === userInfo.name">
             操作：
             <span class="operation" @click="showPhotoVisible = true">修改头像</span>
             <span class="divider">|</span>

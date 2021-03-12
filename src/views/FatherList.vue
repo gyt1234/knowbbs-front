@@ -166,7 +166,11 @@ export default {
     },
     // 点击跳转到个人中心
     goUser(id) {
-      this.$router.push({ name: 'User', params: { id: id } })
+      if (this.username) {
+        this.$router.push({ name: 'User', params: { id: id } })
+      } else {
+        this.$router.push('/login')
+      }
     },
     // 跳转到帖子编辑页面
     goUpdateContent(id) {
