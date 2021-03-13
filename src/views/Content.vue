@@ -124,7 +124,11 @@ export default {
     },
     // 点击跳转到回复页面
     goReply(id) {
-      this.$router.push({ name: 'Reply', params: { id: id } })
+      if (this.username) {
+        this.$router.push({ name: 'Reply', params: { id: id } })
+      } else {
+        this.$router.push('/login')
+      }
     },
     // 获取帖子回复列表
     async getReplyList() {

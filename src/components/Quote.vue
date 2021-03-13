@@ -91,7 +91,11 @@ export default {
     },
     // 跳转到引用回复页面
     goQuote(id, replyId) {
-      this.$router.push({ name: 'Quote', params: { id: id, replyId: replyId } })
+      if (this.username) {
+        this.$router.push({ name: 'Quote', params: { id: id, replyId: replyId } })
+      } else {
+        this.$router.push('/login')
+      }
     }
   }
 }

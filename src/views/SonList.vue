@@ -127,7 +127,11 @@ export default {
     },
     // 跳转到发帖页面
     goPublish(id) {
-      this.$router.push({ name: 'PublishSon', params: { sonId: id } })
+      if (this.username) {
+        this.$router.push({ name: 'PublishSon', params: { sonId: id } })
+      } else {
+        this.$router.push('/login')
+      }
     },
     // 根据帖子id删除对应的帖子
     async deleteContentById(id) {

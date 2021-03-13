@@ -26,7 +26,7 @@
         </div>
         <div class="son-box">
           <div v-for="(content,index) in allContent" :key="index">
-              <content-item :content=content @delete="deleteContentById($event,index)" :photo=photo />
+              <content-item :content=content @delete="deleteContentById($event,index)" />
           </div>
         </div>
         <div class="topic-button">
@@ -130,7 +130,11 @@ export default {
     },
     // 跳转到发帖页面
     goPublish(id) {
-      this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
+      if (this.username) {
+        this.$router.push({ name: 'PublishFather', params: { fatherId: id } })
+      } else {
+        this.$router.push('/login')
+      }
     },
     // 根据帖子id删除对应的帖子
     async deleteContentById(id) {
