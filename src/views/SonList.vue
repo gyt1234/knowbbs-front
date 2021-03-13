@@ -18,7 +18,7 @@
             </div>
             <div class="son-num">
               <span>版主：</span>
-              <span>葛雅婷</span>
+              <span>{{sonInfo.uname ? sonInfo.uname : '暂无'}}</span>
             </div>
             <div class="son-num">
               <span>{{sonInfo && sonInfo.info}}</span>
@@ -30,7 +30,7 @@
         </div>
         <div class="son-box">
           <div v-for="(content,index) in contentList" :key="index">
-            <content-item :content=content @delete="deleteContentById($event,index)" />
+            <content-item :content=content @delete="deleteContentById($event,index)" :boarder=sonInfo.uname />
           </div>
         </div>
         <div class="topic-button">

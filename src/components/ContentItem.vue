@@ -23,7 +23,7 @@
         <p>{{content.comments}}</p>
       </div>
     </div>
-    <div class="icon-zone" v-show="content.username === username">
+    <div class="icon-zone" v-show="(content.username === username) || (username === boarder)">
       <el-tooltip class="item" effect="dark" content="编辑" placement="top">
         <i class="el-icon-edit-outline" @click="goUpdateContent(content.id)"></i>
       </el-tooltip>
@@ -43,7 +43,8 @@ import photo4 from '@/assets/photo4.jpg'
 export default {
   name: 'ContentItem',
   props: {
-    content: Object
+    content: Object,
+    boarder: String
   },
   data() {
     return {
